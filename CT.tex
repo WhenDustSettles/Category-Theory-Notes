@@ -1,0 +1,629 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts, amsmath, amssymb}
+\usepackage[english]{babel}
+% \usepackage{boisik}
+\usepackage{amsthm}
+\usepackage[margin=0.5in]{geometry}
+
+%\usepackage{gfsartemisia}
+%\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+\usepackage[light]{CormorantGaramond}
+\usepackage{quiver}
+
+\usepackage{epigraph}
+%\usepackage{tgbonum}
+%\usepackage{cmbright}
+%\usepackage{textcomp}
+\usepackage[object=am]{pgfornament}
+\usepackage{graphicx}
+\usepackage{tikz-cd}
+
+\usepackage{hyperref} %Uncomment for Hyperlinked Table of Contents.
+
+\hypersetup{
+	colorlinks,
+	citecolor=blue,
+	filecolor=black,
+	linkcolor=blue,
+	urlcolor=blue
+}
+
+\theoremstyle{definition}
+\newtheorem{definition}{$\boxed{\star}$ Definition}
+\newcommand{\tit}[1]{\textit{#1}}
+\newtheorem{theorem}{$\boxed{\boxed{\circledast}}$ Theorem}
+
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\theoremstyle{definition}
+\newtheorem{corollary}{$ \to $ Corollary}
+
+\theoremstyle{definition}
+\newtheorem{proposition}{$\bigstar$ Proposition}
+
+\theoremstyle{definition}
+\newtheorem*{attempt}{Attempt}
+
+\title{Category Theory\\%Toposes, Triples \& Theories\\
+	\large Definitions, Propositions, Theorems \& Proofs}
+\author{Animesh Renanse}
+\date{\today}
+\usepackage{amsthm}
+
+\newcommand{\inv}[1]{#1^{-1}}
+\newcommand{\gen}[1]{\left\langle #1\right\rangle}
+\newcommand{\order}[1]{\left\vert #1 \right\vert}
+\newcommand{\image}[0]{\text{Im }}
+\newcommand{\kernel}[0]{\text{Ker }}
+\newcommand{\nsg}[0]{\trianglelefteq}
+\newcommand{\isomorph}{\cong}
+\newcommand{\End}[1]{\text{\textbf{End}}\left(#1\right)}
+\newcommand{\Auto}[1]{\text{\textbf{Aut}}\left(#1\right)}
+\newcommand{\pset}{\mathbf{P}}
+\newcommand{\proofref}[1]{\emph{Refer to proof in Appendix #1}}
+%\makeatletter
+%\newcommand*\bigcdot{\mathpalette\bigcdot@{.5}}
+
+%For Categories
+\newcommand{\cat}[1]{\mathfrak{#1}}
+\newcommand{\opcat}[1]{\mathfrak{#1}^{\text{op}}}
+\newcommand{\obj}[1]{\text{\textit{Ob}}(#1)}
+\newcommand{\arr}[1]{\text{\textit{Ar}}(#1)}
+
+\newcommand{\Id}[1]{\text{id}_{#1}}
+\newcommand{\homset}[3]{\text{Hom}_{#1}(#2,#3)}
+
+\renewcommand{\qedsymbol}{\ensuremath{\blacksquare}}
+\newcommand{\point}[0]{$\blacktriangleright\;$}
+\newcommand{\singobj}[1]{\bullet_{#1}}
+\newcommand{\Func}[2]{\text{Func}\left (#1,#2\right )}
+\newcommand{\Nat}[2]{\text{Nat}\left (#1,#2\right )}
+\newcommand{\func}[2]{{#2}^{#1}}
+\newcommand{\GL}[1]{\text{GL}_{#1}}
+\newcommand{\Un}{\text{Un}}
+\newcommand{\elem}[1]{\in ^{#1}}
+
+\newcommand{\res}{$ \bigstar $ \textbf{Proposition.}\;}
+\newcommand{\mono}{\begin{tikzcd}
+		{} & {}
+		\arrow[tail, from=1-1, to=1-2]
+\end{tikzcd}}
+
+
+\begin{document}
+	
+	\maketitle
+	\tableofcontents
+\section{Categories}
+A category $ \cat{C} $ is a collection of two entities : \textbf{Objects}, denoted by $ \obj{\cat{C}} $ and \textbf{Arrows}, denoted by $ \arr{\cat{C}} $. Each arrow in $ \arr{\cat{C}} $ is assigned a \textbf{Domain} and a \textbf{Co-Domain} from the $ \obj{\cat{C}} $ denoted by
+\[f \in \arr{\cat{C}} \;\text{such that}\;f : A \to B\;\text{for}\;A,B\in \obj{\cat{C}}.\]
+where $ A $ is the domain of arrow $ f $ and $ B $ is the co-domain. Moreover, if it so happens that there are arrows $ f,g\in \arr{\cat{C}} $ such that $ f : A \to B$ and $ g : B\to C $, then there must be another arrow, called \textbf{Composite} $ g\circ f \in \arr{\cat{C}}$ such that $ g\circ f : A\to C $. Finally, for each object $A\in \obj{C} $, there must be an \textbf{Identity} arrow $ \arr{\cat{C}} $ such that $ \Id{A} : A\to A $.\\\\
+All the arrows must confirm to \textbf{Associativity under composition} and \textbf{Identity over composition with Identity arrows}:
+\begin{itemize}
+	\item{For $ f : A\to B,g : B\to C, h : C\to D $ in $ \arr{\cat{C}} $ for $ A,B,C,D \in \obj{\cat{C}} $,
+\[h\circ (g\circ f) = (h\circ g)\circ f\]	
+}
+\item{For any $ f : A\to B $ 
+\[f\circ \Id{A} = \Id{B}\circ f = f\]
+}
+\end{itemize}
+\point\textbf{Small Categories} : When $ \arr{\cat{C}} $ is a set. ($ \implies $ The $ \obj{\cat{C}} $ is also a set.)\\\\
+\point\textbf{Homset} : Select two $ A,B\in \obj{\cat{C}} $ and then the (\textit{assumed}) set of all arrows $ f : A\to B $ in $ \arr{\cat{C}} $ is represented by $ \homset{\cat{C}}{A}{B} $.\\\\
+\point\textbf{Subcategory} : A subcategory $ \cat{D} $ of a category $ \cat{C} $ is a pair of subsets $ D_O $ and $ D_A $ of the objects and arrows of $ \cat{C} $ respectively with the property that (1.) any $ f\in D_A $ must have it's source and target in $ D_O $, (2.) if $ C\in D_O $ then $ \Id{C}\in D_A $ and (3.) if $ f,g \in D_A$ are composable then their composite $ g\circ f $ must also be in $D_A$.\\\\
+\point\textbf{Slice Category} : A category $ \cat{C}/A $ of objects of $ \cat{C} $ \textit{over} an object $ A $ such that $ \obj{\cat{C}/A} $ is the collection of all arrows of $ \cat{C} $ with target $ A $ and for objects $ f:B\to A $ and $ g:C\to A $, there is an arrow $ h :B\to C$ in $ \arr{\cat{C}/A} $ such that $ f = g\cdot h $.
+\begin{figure}[h!]
+	\[\begin{tikzcd}
+		B\arrow[swap]{d}{f}\arrow{r}{h}  &C \arrow{dl}{g}\\
+		A
+	\end{tikzcd}\]
+\caption{$ h : B\to C $ is the arrow in $ \arr{\cat{C}/A} $ with source $ f $ and target $ g $.}
+\end{figure}
+\newline
+\point \textbf{Isomorphism} : Arrow $ f : A\to B $ in a category is an isomorphism if it has an \emph{inverse} arrow $ g:B\to A $ such that $ f\circ g = \Id{B} $ and $ g\circ f: \Id{A} $. Moreover, $ A $ and $ B $ are then referred isomorphic.\\\\
+\point \textbf{Opposite Category} : Category $ \opcat{C} $ is the opposite category of $ \cat{C} $ if for any $ A,B\in \obj{\cat{C}}$ we have
+\[\homset{\cat{C}}{A}{B} = \homset{\opcat{C}}{B}{A}\]
+\point \textbf{Initial \& Terminal Object} : $ T\in \obj{\cat{C}} $ is terminal (initial) if $ \homset{\cat{C}}{A}{T} $ ($ \homset{\cat{C}}{T}{A} $) has one element only, for any $ A\in \obj{\cat{C}} $. 
+
+\hrulefill
+\subsection{Selected problems in Exercise 1.1}  
+\begin{attempt}[SGRPOID]
+	\textit{Given} : Define $ e $ to have the \emph{identity property} when for all $ f$ and $ g $, $ e\circ f =  f $ whenever $ e\circ f $ is defined and $ g\circ e = g $ whenever $ g\circ e $ is defined. \\
+	Consider that we have a category $ \cat{C} $. We now show that the given alternate definition is equivalent to the usual definition. First consider the information we get from part a. The first equivalence yields that composition is defined between the \textit{composable} arrows from collection of arrows $ \arr{\cat{C}} $. Second \& Third implies the existence of dual composes which hence implies that target of $ h$ = source of $ g $ and target of $ g $ = source of $ f $. This sets the setting for associativity rule.\\
+	Next, the part b implies the \textit{associativity} rule of arrows composable in $ \arr{\cat{C}} $.\\
+	Part c implies the \textit{existence of identity} elements $ e $ and $ e^\prime $ which corresponds to the identity arrows of target and source of $ $ respectively.
+\end{attempt}
+\begin{attempt}[CCON]
+	\label{CCON}
+	\textit{Given} : The proposed categorical constructions.\\
+Let $ \cat{C} $ be a category. We now verify the corresponding properties indeed lead to categories.\\
+The part a introduces \textit{arrow category} $ \cat{Ar}(\cat{C})$ which has objects as arrows of $ \cat{C} $ and an arrow from $ f :A\to B $ to $ g:A^\prime \to B^\prime $ becomes a pair of arrows $ h:A\to A^\prime $ and $ k : B\to B^\prime $ such that $ g\circ h  = k\circ f$. Clearly, each arrow in $ \arr{\cat{Ar}(\cat{C})} $ has a source and target as arrows in $ \obj{\cat{Ar}(\cat{C})} $. Consider four arrows $ k:A\to B , g:B\to C, f:C\to D\;\&\; d:E\to F$ in $ \obj{\cat{Ar}(\cat{C})} $. Note that these are arrows of $ \cat{C} $. We then have that there are 6 arrows $ h_1:A\to B, k_1 : B\to C, h_2: B\to C, k_2:C\to D, h_3 : C\to E\;\& \; k_3 : D\to F $ in $ \arr{\cat{Ar}(\cat{C})} $. Since the arrows $ h_1,k_1,h_2,k_2,h_3,k_3 $ are associative as they are arrows of $ \cat{C} $, hence we have the \textit{associativity} for $ \cat{Ar}(\cat{C}) $.\\
+The \textit{identity} and \textit{unital} property is trivial from the identity arrows of category $ \cat{C} $ and the given commutative diagram.
+\end{attempt}
+\hrulefill
+\newpage
+\section{Functors}
+If $ \cat{C} $ and $ \cat{D} $ are categories, then a functor $ F : \cat{C} \to \cat{D} $ is a map between categories for which,
+\begin{itemize}
+	\item{Functors maps \textit{arrows to arrows} : If $ f:A\to B $ is an arrow in $ \arr{\cat{C}} $, then $ Ff : FA \to FB $ is an arrow in $ \arr{\cat{D}} $.}
+	\item {Functors \textit{preserves identity arrows} : $ F(\Id{A}) =  \Id{FA}$.}
+	\item {Functors \textit{preserves composition} : If $f: A\to B $ and $ g: B\to C $ are in $ \arr{C} $ then $ F(g\circ f) = Fg \circ Ff $.}
+\end{itemize}
+\point \textbf{Contravariant Functor} : A functor $ F:\opcat{C}\to \cat{D} $ is called contravariant from $ \cat{C} $ to $ \cat{D} $. The usual functor $ F:\cat{C} \to \cat{D}$ is called covariant.\\\\
+\point\textbf{Faithful Functor} : A functor $ F:\cat{C}\to \cat{D} $ is faithful if it is injective when restricted to each homset. That is, each arrow in any homset is mapped to a distinct arrow in the mapped homset.\\\\
+\point \textbf{Full Functor} : A functor $ F:\cat{C}\to \cat{D} $ is full if it is surjective on each homset. That is, for any $ A,B\in \obj{\cat{C}} $, every arrow in $ \homset{\cat{D}}{FA}{FB} $ is mapped by $ F $ from some arrow in $ \homset{\cat{C}}{A}{B} $.\\\\
+\point \textbf{Preservation of a property} : A functor $ F $ preserves a property $ P $ that an arrow may have if $ F(f) $ also has the property $ P $ whenever $ f $ has.\\\\
+\point \textbf{Reflection of a property} : A functor $ F $ reflects a property $ P $ if $ f $ has the property whenever $ F(f) $ has.\\\\
+\point \textbf{Hom Functor} : First, for a fixed object $ A $, define $ \homset{\cat{C}}{A}{f}  : \homset{\cat{C}}{A}{B} \longrightarrow \homset{\cat{C}}{A}{C}$ for each $ f:B\longrightarrow C $ by requiring that $ \homset{\cat{C}}{A}{f}(g) = f\circ g$ for any $ g\in \homset{\cat{C}}{A}{B}$. Now, 
+\begin{enumerate}
+	\item {For a fixed object $ A \in \obj{\cat{C}}$, $ \homset{\cat{C}}{A}{-} : \cat{C} \longrightarrow \cat{Set}$ is a \textbf{covariant hom functor}.}
+	\item {For a fixed object $ B\in\obj{\cat{C}}  $, $ \homset{\cat{C}}{-}{B} : \opcat{C}\longrightarrow \cat{Set}$ is a \textbf{contravariant hom functor}.}
+\end{enumerate}
+\emph{Refer to proof in Appendix \ref{PROOF-1}}.\\\\
+\point \textbf{Powerset Functor} : The powerset contravariant functor is defined as the $ \pset : \opcat{Set} \longrightarrow \cat{Set} $ such that if $ f : A\to B\in \arr{\cat{Set}} $, then $ \pset f : \pset B \to \pset A $ is the inverse of $ f $. Specifically, for $ B_0 \in \pset B $ (that is, $ B_0 \subseteq B $), we have
+\[\pset f(B_0) = \{x\in A \;\vert\; f(x) \in B_0\} = \inv{f}(B_0).\]
+\subsection{Equivalence of Categories}
+Since the composite of a functor is a functor, the collection of categories is in itself a category, denoted by $ \cat{Cat} $(!) \proofref{\ref{PROOF-2}}.\\\\
+\point \textbf{Isomorphic Categories} : If $ \cat{C} $ and $ \cat{D} $ are categories and $ F $ is a functor $ F : \cat{C} \to \cat{D} $ such that it is an isomorphism in category of categories $ \cat{Cat} $, then $ \cat{C}$ and $ \cat{D} $ are said to be isomorphic.\\\\
+\point \textbf{Functor Equivalence} : A functor $ F : \cat{C} \longrightarrow \cat{D} $ is said to be an equivalence if it's full and faithful and has the property that for any object $ B \in \obj{\cat{D}}$, there is an object $ A\in \obj{\cat{C}} $ for which $ F(A) $ is isomorphic to $ B $. Moreover, $ \cat{C} $ and $ \cat{D} $ are said to be equivalent.\\\\
+\point \textbf{Comma Categories} : Let $ \cat{A},\cat{C} $ and $ \cat{D} $ be categories and $ F : \cat{C} \to \cat{A} $, $ G:\cat{D} \to \cat{A}$ be functors. The comma category $ (F,G) $ is the generalization of \emph{slice categories} $ \cat{A}/ A $ over an object $ A $. 
+\begin{itemize}
+	\item {The \textbf{objects} of $ (F,G) $ are triples $ (C,f,D) $ with $ f: FC \to GD$ an arrow in $ \arr{\cat{A}} $, $ C \in \obj{\cat{C}} $  and $ D\in \obj{\cat{D}} $.}
+	\item {An \textbf{arrow} $ (h,k): (C,f,D) \longrightarrow (C^{\prime},f^{\prime},D^{\prime}) $ consists of $ h:C\to C^{\prime} $ and $ k:D\to D^{\prime} $ with the property that 
+\[\begin{tikzcd}
+	FC\arrow{r}{Fh} \arrow[swap]{d}{f} &FC^{\prime} \arrow{d}{f^{\prime}}\\
+	GD\arrow[swap]{r}{Gk} &GD^{\prime}
+\end{tikzcd} \;\;\;\text{\textbf{commutes}.}\]	
+}
+\item {\textbf{Composition} of arrows is given on components by composition in $ \cat{C} $ and $ \cat{D} $. That is, when conformable, $ (h_1,k_1)\circ (h_2,k_2) = (h_1\circ h_2,k_1\circ k_2) $.}
+\end{itemize}
+From the definition, it's easy to see $ (F,G) $ forms a category. Moreover, if $ \cat{C} = \cat{A} $ and $ \cat{D} = \cat{1} $, then $ F $ would be an identity functor and $ G $ would map $ \singobj{\cat{1}} $ to some object $ A_\bullet $ in $ \cat{A} $. Then $ (\Id{\cat{A}},A_\bullet) $ is exactly the slice category $ \cat{A}/A_\bullet $, which is easy to see from the above diagram too.\\\\
+\point \textbf{Projections} : Each comma category $ (F,G) $ is equipped with two projections:
+\begin{enumerate}
+	\item {$ p_1 : (F,G) \to \cat{C} $ which projects objects and arrows of $ (F,G) $ onto their first coordinates. That is, $ (C,f,D) $ to $ C $ and $ (h,k) $ to $ h $.}
+	\item {$ p_2 : (F,G)  \to \cat{D}$ which projects objects onto their third coordinates and arrows onto their second. That is, $ (C,f,D) $ to $ D $ and $ (h,k) $ to $ k $.}
+\end{enumerate}
+
+\hrulefill 
+\subsection{Selected problems in Exercise 1.2}
+\begin{attempt}[PISO]
+	Consider categories $ \cat{C} $ and $ \cat{D} $ and let $ F $ be a Functor between them. Then if $ f\in \arr{\cat{C}} $ is an isomorphism such that $ f: A\to B $, then there exists $ g : B\to A $ such that $ f\circ g = \Id{B} $ and $ g\circ f = \Id{A} $. Now, by the definition of functor, $ Ff : FA\to FB $ and $ Fg : FB\to FA $ with $ F(f\circ g) = Ff\circ Fg = F\Id{B} = \Id{FB} $ and $ F(g\circ f) = Fg\circ Ff = F\Id{A} = \Id{FA} $. Therefore $ Ff $ is also an isomorphism in category $ \cat{D} $.\\
+	Now, consider $ \cat{D} $ be such that it contains only one object and one arrow. Now a functor from any category $ \cat{C} $ with atleast one arrow which is not an isomorphism, will map that arrow to an isomorphism in $ \cat{D} $, showing that functors may not reflect the isomorphism property.
+\end{attempt}
+\begin{attempt}[EAAM] \emph{In Notes. Add Later.}
+	
+\end{attempt}
+\begin{attempt}[PREORD]
+	\emph{In Notes. Add Later.}
+\end{attempt}
+\hrulefill
+\newpage
+\section{Natural Transformations}
+\point \textbf{Natural Transformation} : If $ F : \cat{C} \to \cat{D} $ and $ G : \cat{C} \to \cat{D} $ are two functors, then $ \lambda : F \longrightarrow G $ is a natural transformation from $ F $ to $ G $ if $ \lambda $ is a collection of arrows $ \lambda C : FC \longrightarrow  GC $, one for each object $ C \in \obj{\cat{C}} $, such that for each arrow $ g : C\longrightarrow C^{\prime} $ in $ \arr{\cat{C}} $ the following diagram
+\[\begin{tikzcd}
+	FC \arrow[swap]{d}{Fg} \arrow{r}{\lambda C} &GC\arrow{d}{Gg}\\
+	FC^{\prime} \arrow[swap]{r}{\lambda C^{\prime}} &GC^{\prime} 
+\end{tikzcd}\;\;\text{\textbf{commutes}.}\]
+Also, the arrows $ \lambda C $ are known as the \textbf{components} of $ \lambda $.\\
+An example is the determinant map from $ \text{GL}_n $ to $ \text{Un} $. \emph{Refer to concrete statement and proof in Appendix \ref{PROOF-3}}.\\\\
+\point \textbf{Natural Equivalence} : The natural transformation $ \lambda $ is a natural equivalence if each component of $ \lambda $ is an isomorphism.\\\\
+\point \textbf{Functor Category} : Let $ \cat{C} $ and $ \cat{D} $ be categories where $ \cat{C} $ is small. The collection $ \Func{\cat{C}}{\cat{D}} $ of functors from $ \cat{C} $ to $ \cat{D} $ as objects with natural transformations between them as arrows where composition $ \mu\circ \lambda $ between two arrows $ \mu: F\to G $ and $ \lambda : G\to H $ (natural transformations) is defined by requiring it's component at $ C $ to be $ \mu C \circ \lambda C $, is a category, named as Functor Category.\\ 
+Few basic observations are:
+\begin{itemize}
+	\item {The functor category $ \obj{\Func{\cat{C}}{\cat{D}} }$ is just the $ \homset{\cat{Cat}}{\cat{C}}{\cat{D}} $.}
+	\item {Due to the above observation, we can extend the idea of Hom functors to $ \Func{\cat{C}}{\cat{D}} $. That is, for any $ F : \cat{D} \to \cat{E} $, 
+\[\Func{\cat{C}}{F} : \Func{\cat{C}}{\cat{D}} \longrightarrow \Func{\cat{C}}{\cat{E}}\]
+is a Functor, not only a morphism in $ \cat{Set} $.	
+}
+\item {The Hom-Functor in $ \Func{\cat{C}}{\cat{D}} $ is denoted by $ \Nat{F}{G} $ for functors $ F,G : \cat{C} \to \cat{D}$ in $ \obj{\Func{\cat{C}}{\cat{D}}} $.}
+\item {Alternatively, one can write $ \Func{\cat{C}}{\cat{D}} $ as $ \func{\cat{C}}{\cat{D}} $.}
+\end{itemize}
+\emph{A nice exercise is presented in Appendix \ref{A-6} (\textbf{Complete it Please}).}
+\subsection{Selected problems from Exercise 1.3}
+\begin{attempt}{(NTF).}  
+We need to describe a natural transformation as a functor from an arrow category to a functor category. Define the following map:
+\[\Omega :\cat{Ar(C)} \longrightarrow \Func{\cat{I}}{\cat{C}}\]
+where $ \obj{\cat{I}} = \{A,B\}  $ and $ \arr{\cat{I}} =\{\Id{A}, \Id{B}, f : A\to B\} $. The map $ \Omega  $ is such that for $ g : C\to D$ in $ \obj{\cat{Ar(C)}} $, we get $ \Omega g = F_g $ where $ F_g $ is a functor from $ \cat{I} $ to $ \cat{C} $. Due to the structure of $ \cat{I} $, we get that $ F_g f : F_g A \to F_g B $ is a unique arrow of $ \Func{\cat{I}}{\cat{C}} $ and each arrow of $ \cat{C} $ can hence be mapped to a unique arrow in $ \Func{\cat{I}}{\cat{C}} $. Now, $ \Omega $ is also defined to take an arrow $ (a,b) $ in $ \cat{Ar(C)} $ to component-wise action, that is, $ \Omega (a,b) = (\Omega a, \Omega b) $, where $ (a,b) $ is such that
+\[\begin{tikzcd}
+	C \arrow[swap]{d}{a}\arrow{r}{g} &D\arrow{d}{b}\\
+	E\arrow[swap]{r}{h} &F
+\end{tikzcd}\;\text{commutes.}\] 
+Now, for two functors $ F_g $ and $ F_h $ in $ \Func{\cat{I}}{\cat{C}} $, generated from $ \Omega g $ and $ \Omega h $ for $ g,h \in \obj{\cat{Ar(C)}} $, we get 
+\[\begin{tikzcd}
+	F_g A \arrow[swap]{d}{F_a f}\arrow{r}{F_gf} &F_g B\arrow{d}{F_bf}\\
+	F_h A \arrow[swap]{r}{F_hf} &F_h B
+\end{tikzcd}\]
+which also commutes because $ \Omega $ with the above definition forms an equivalence functor. Hence, there is an equivalence between $ \cat{Ar(C)} $ and $ \Func{\cat{I}}{\cat{C}} $. \footnote{Note that to make the above construction simpler, once could have simply defined $ \Omega g = F_g  $ as $ F_g(A) = C, F_g(B) = D $ and $ F_gf = g $ for any $ g:C\to D $ in $ \obj{\cat{Arr(C)}} $. It is easily verified that this construction makes $ \Omega g $ a functor from $ \cat{I}\to \cat{C} $ and hence, $ \Omega $ itself being a functor.}
+\end{attempt}
+\begin{attempt}{(NTG).} 
+	It's not difficult to see that the natural transformation between groups as one element categories are the collection of elements of the target group which commute with all other elements of the group (or inner automorphism of the group) due to naturality conditions of the commutative square.
+\end{attempt}
+\newpage
+\section{Elements}
+\point \textbf{Element of $ A $ defined over $ T $} : Consider a category $ \cat{C} $ and an arrow $ x : T \to A $ in $ \arr{\cat{C}} $. Then, the arrow $ x $ can be considered as element of $ A $, defined over $ T $\footnote{One way of thinking of an element $ x $ is to consider $ x $ as a set of elements of object $ A $ indexed by object $ T $ in a category.}. 
+\begin{itemize}
+	\item {When $ x:T\to A $ is thought of as an element of $ A $ defined over $ T $, then we call $ T $ as the \textbf{domain of variation} of element $ x $.}
+	\item {One denotes element $ x:T\to A $ of $ A $ defined over $ T $ as $ x\elem{T}A $.}
+	\item {If $ x\elem{T} A $ and $ f : A\to B $ is an arrow, then $ f\circ x \elem{T} B $. It's hence simpler to write $ f\circ x $ as $ f(x) $.}
+	\item {The element $ \Id{A} : A\to A $ is called the \textbf{generic element} of $ A $.}
+	\item {If $ F : \cat{C} \to \cat{D}$ is a functor and $ A $ is an object of $ \cat{C} $, then \textbf{functor} $ F $ maps $ A $ to an object $ FA $ in $ \cat{D} $ such that 
+\begin{enumerate}
+	\item {If $ x = \Id{A} : A\to A $ is generic, then $ Fx = \Id{FA} : FA \to FA$ is also generic.}
+	\item {If $ x\elem{T}A $ and $ f : A\to B $, then $ F(f(x)) = Ff\circ Fx$.}
+\end{enumerate}	
+Both are just the usual properties of a functor.
+}
+\item {An arrow $ f : A\to B $ is an \textbf{isomorphism} in a category $ \cat{C} $ if and only if $ f $, thought of as a function, is a bijection between the elements of $ A $ defined over $ T $ and elements of $ B $ defined over $ T $ for all objects $ T $ of $ \cat{C} $.}
+\item {A \textbf{terminal object} $ A $ can hence be seen to contain only one element for any domain of variation $ S $. That is, if $ A $ is terminal, then $ x\elem{S}A $ is the only element of $ A $ with this domain of variation.}
+\end{itemize}
+\subsection{Monic \& Epic} 
+\point \textbf{Monomorphism} : An arrow $ f :A\to B $ in a category $ \cat{C} $ is called a monomorphism if $ f $ is injective on elements of $ A $ defined over any object $ T $. That is, for $ x,y\elem{T} A $, $ f(x) = f(y) $ implies $ x=y $. Note that we actually here mean $ \homset{\cat{C}}{T}{f} $ when we write$ f $.\\
+Another important observation is that since $ f $ is injective, $ f\circ x = f\circ y \implies x = y $ for $ x,y \elem{T} A $, which is that a \emph{mono is left cancellable.} Denote $ f $ to be a monomorphism by:
+\[\begin{tikzcd}
+	A & B
+	\arrow[tail, from=1-1, to=1-2]
+\end{tikzcd}\]
+\\
+\point  \textbf{Epimorphism} : The arrow $ f : A\to B$ is an epimorphism if it is \emph{right cancellable}. That is, if $ x\circ f = y\circ f $, then $ x=y $ for $ x,y \elem{B} C $. This is true if and only if the contravariant hom functor $ \homset{\cat{C}}{f}{T} $ is injective for any object $ T $. With this, it is trivial to see that a monic is injective and epic is surjective in $ \cat{Set} $\footnote{The surjective nature of epis follows from the inverse map $ \homset{\cat{C}}{f}{T} : \homset{\opcat{C}}{B}{T} \to \homset{\opcat{C}}{A}{T} $ which is given injective. Remember contravariant hom functor is given by right composition in $ \opcat{C} $, that is, $ \homset{\cat{C}}{f}{T} : \opcat{C} \to \cat{Set} $ such that $ \homset{\cat{C}}{f}{T} (g) = g\circ f$ for $ g\in \homset{\opcat{C}}{B}{T} $. }. Denote $ f  $ to be a epimorphism by:
+\[\begin{tikzcd}
+	A & B
+	\arrow[two heads, from=1-1, to=1-2]
+\end{tikzcd}\]
+\\
+\point \textbf{Split Epimorphism} : An epimorphism $ f : A\to B $ in $ \cat{C} $ is a split epimorphism if it is surjective on elements defined over any object $ T $. That is, the set function $ \homset{\cat{C}}{T}{f} : \homset{\cat{C}}{T}{A} \to \homset{\cat{C}}{T}{B} $ defined by $ \homset{\cat{C}}{T}{f} (g) = f\circ g$ for $ g\in 
+\homset{\cat{C}}{T}{A} $ is surjective for any object $ T $ in $ \cat{C} $.\\
+Equivalently, if there is an arrow $ g : B\to A $ such that $ f\circ g = \Id{B} $, then $ f $ is a split epimorphism. With this definition, it is trivial to see that all split epis are surjective in $ \cat{Set} $.
+\\\\
+\point \textbf{Split Monomorphism} : An arrow $ f : A\to B $ with a left inverse $ g : B\to A $ is called a split monos. That is, $ g\circ f = \Id{A} $. Split monos in $ \cat{Top} $ are called \emph{retractions}.
+\subsection{Subobject}
+\point \textbf{Factors of an arrow} : Suppose $ a : T \to A $ and $ i : A_0 \to A $ is a monomorphism, then, if there exists an arrow $ j: T\to A_0 $ such that
+\[\begin{tikzcd}
+	T & A \\
+	{A_0}
+	\arrow["a", from=1-1, to=1-2]
+	\arrow["j"', from=1-1, to=2-1]
+	\arrow["i"', tail, from=2-1, to=1-2]
+\end{tikzcd}\;\text{\textbf{commutes},}\]
+then we say that \emph{$ a $ factors through $ i $}. We additionally write that $ a\elem{T}_A A_0 $ to say that \emph{the element $ a  $ of $ A $ is an element of $ A_0 $.}
+\newpage
+
+\begin{proposition}\label{P-1}
+	Let $i :A_0 \to A $ and $ i^{\prime} : A_0^{\prime} \to A $ be monomorphisms in a category $ \cat{C} $. Then $ A_0 $ and $ A_0^{\prime} $ have the same elements of $ A $ if and only if there is an \textbf{isomorphism} $ j : A_0 \to A_0^{\prime} $ such that
+	\[\begin{tikzcd}
+		{A_0^{\prime}} & A \\
+		{A_0}
+		\arrow[tail,"{i}"', from=2-1, to=1-2]
+		\arrow[tail,"i^{\prime}", from=1-1, to=1-2]
+		\arrow["j", from=2-1, to=1-1]
+	\end{tikzcd}\;\text{\textbf{commutes.}}\]
+\end{proposition}
+\begin{proof}
+	First, suppose that given to us are the two monomorphisms $ i : A_0 \to A, i^{\prime} : A_0^{\prime}\to A $ and that $ A_0 $ and $ A $ have same elements under $ A $. Since we have $ i \elem{A_0}_A A_0 $ and $ A_0 $ and $ A_0^{\prime} $ have same elements, therefore $ i\elem{A_0}_A A_0^{\prime} $. This means that there is an arrow $ j : A_0 \to A_0^{\prime} $. But we have a monomorphism $ i^{\prime} : A_o^{\prime} \to A $, therefore, $ i $ factors through $ i^{\prime} $. This means that $ i = i^{\prime} \circ j $. Similarly, when we use this argument for $ A_0^{\prime} $ instead of $ A_0 $, we would get another arrow $ k : A_0^{\prime} \to A_0 $ such that $ i^{\prime} = i\circ k $. Combining both $ i = i^{\prime}\circ j $ and $ i^{\prime} = i\circ k $ with the fact that $ i $ and $ i^{\prime} $ are monomorphisms, we get that $ j\circ k = \Id{A_0^{\prime}} $ and $ k\circ j = \Id{A_0}$, showing that $ j $(or $ k $) is an isomorphism.\\
+	For the converse, we have that there is an isomorphism $ j : A_0 \to A_0^{\prime} $ such that $ i = i^{\prime}\circ j  $ where $ i : A_0 \to A $ and $ i^{\prime} : A_0^{\prime} \to A $ are given monomorphisms. We need to prove that $ A_0 $ and $ A_0^{\prime} $ have same elements of $ A $. For this, consider the element $ a $ of $ A $ which is also an element of $ A_0^{\prime} $, that is, $ a\elem{T}_A A_0 $. This means that $ a = i\circ u $ where $ u: T\to A_0 $. But we have the isomorphism $ j : A_0 \to A_0^{\prime} $, therefore we can write $ a \elem{T}_A A_0^{\prime} $ where $ a = i^{\prime}\circ j\circ u $. Therefore $ a $ factors through $ A_0^{\prime} $. One can similarly show that for $ a\elem{T}_A A_0^{\prime} $, $ a\elem{T}_A A_0 $, so that both $ A $ and $ A_0^{\prime} $ has same elements of $ A $.
+\end{proof}
+\hrulefill
+
+\point \textbf{Equivalent Monomorphisms} : Two monomorphisms are said to be equivalent if they have same elements\footnote{By Proposition \ref{P-1}, one can equivalently say that $ a : A\to B $ and $ c : C\to B $ are \emph{equivalent} if and only if $ \exists $ an isomorphism $ j : A \to C $.}.\\\\
+\point \textbf{Subobject} : A subobject of an object $ A $ is an equivalence class of monomorphisms into $ A $.\\
+ That is, for $ f : A_0 \to A $ is an element of a subobject, then for any other member of that subobject $ g : A_1\to A $, there exists an isomorphism $ j : A_0 \to A_1 $\footnote{It is usual to refer to a subobject of an object $ A $ by referring to one of it's members, say, $ f : A_0 \rightarrowtail A_1 $}. \\
+ \emph{More clear statement in Appendix \ref{A-4}}.\\\\
+\point \textbf{Global Element} : An arrow in a category $ \cat{C} $ from \textbf{the} terminal object\footnote{Let $ \cat{C} $ be a category. Observe that any arrow which has source as a terminal object is a monomorphism. Moreover, because terminal objects as a target has only one arrow for any source, therefore any two terminal objects in a category are isomorphic! Hence, any arrow from a terminal object is a monomorphism and therefore defines a subobject of it's target which contains only one monomorphism based on each terminal object to that target.} to some object $ A $ is called a global element of $ A $.\\\\
+
+\newpage
+\section{Yoneda Lemma}
+\point \textbf{Yoneda Embedding} : Consider a category $ \cat{C} $. For an arrow $ f : A\to B $ in $ \cat{C} $, we have two corresponding hom-functors $ \homset{}{B}{-} $ and $ \homset{}{A}{-} $ from $ \cat{C}  $ to $ \cat{Set} $.\\
+ The Yoneda embedding for the arrow $ f $ is then defined as the natural transformation $ \lambda : \homset{}{B}{-} \longrightarrow \homset{}{A}{-}$ whose component at an object $ C $ of $ \cat{C} $ is the arrow $ \lambda C : \homset{}{B}{C} \to \homset{}{A}{C} $ which takes an arrow $ g : B\to C $ to $ g\circ f : A\to C$. \\
+ Yoneda Embedding therefore defines a contravariant functor $ \lambda : \opcat{C} \to \Func{\cat{C}}{\cat{Set}}$.\\
+ \emph{Refer to proof that this is indeed a Functor in Appendix \ref{A-5}}\\
+ \begin{proposition}\label{P-2}
+ 	(\textbf{Yoneda Lemma}) Consider the following two functors:
+ 	\begin{enumerate}
+ 		\item {Composite Functor : The following map
+ 			\[\gamma : \cat{C} \times \Func{\cat{C}}{\cat{Set}} \longrightarrow \cat{Set}\]
+ 			is a functor which maps 
+ 			\begin{itemize}
+ 				\item {\textbf{Objects} : for $ B \in \obj{\cat{C}} $ and functor $ F \in \obj{\Func{\cat{C}}{\cat{Set}}} $,$\gamma$ maps $ (B,F) $ to the following set:
+ 			\[\gamma (B,F) = \Nat{\homset{}{B}{-}}{F}.\]	
+ 			}
+ 		\item {\textbf{Arrows} : for $ f : A\to B $ in $ \arr{\cat{C}} $ and natural transformation $ \lambda : F \to G $ in $ \arr{\Func{\cat{C}}{\cat{Set}}}$, $ \gamma $ maps $ (f,\lambda) $ to the following set function\footnote{Note that this composes the Yoneda Embedding Functor from $ \cat{C} \to \Func{\opcat{C}}{\cat{Set}}$.}:
+ 	\[\gamma(f,\lambda) (\mu) = \lambda \circ \mu \circ \homset{}{f}{-} \]
+ 	where $ \mu \in \Nat{\homset{}{A}{-}}{F}$.	Note that $ \homset{}{f}{-} $ is a natural transformation $ \homset{}{B}{-} \longrightarrow  \homset{}{A}{-}$, which is the Yoneda Embedding.
+ 	}
+ 			\end{itemize}
+ 		\item {Evaluation Functor : The following map
+ 	\[\chi: \cat{C} \times \Func{\cat{C}}{\cat{Set}} \longrightarrow \cat{Set}\]	
+ 	is a functor which maps
+ 	\begin{itemize}
+ 		\item {\textbf{Objects} : for $ B \in \obj{\cat{C}} $ and functor $ F \in \obj{\Func{\cat{C}}{\cat{Set}}} $,$\gamma$ maps $ (B,F) $ to the following set:
+ 	\[\chi(B,F) = FB.\]	
+ 	}
+	\item {\textbf{Arrows} : for $ f : A\to B $ in $ \arr{\cat{C}} $ and natural transformation $ \lambda : F \to G $ in $ \arr{\Func{\cat{C}}{\cat{Set}}}$, $ \gamma $ maps $ (f,\lambda) $ to the following set function:
+\[\chi(f,\lambda) = Gf\circ \lambda A.\]	
+ }
+ 	\end{itemize}
+ 	}
+ 	}
+ 	\end{enumerate}
+ Then, for any $ B\in \obj{\cat{C}} $, the arrow in $ \cat{Set} $
+ \begin{equation}\label{Eq-1}
+ 	\begin{split}
+ 		\varphi :\; &\Nat{\homset{}{B}{-}}{F} \longrightarrow FB\\
+ 		&\text{which takes a } \lambda \text{ to a set element of $ FB $ as},\\
+ 		 & \varphi(\lambda) = (\lambda B) (\Id{B})
+ 	\end{split}
+ \end{equation}
+is an \textbf{Isomorphism}(!)\\
+More specifically, the natural transformation $ \phi $ given as
+\begin{equation}
+	\phi : \gamma \longrightarrow \chi
+\end{equation}
+which takes any object $ (B,F) $ in $ \cat{C}\times \Func{\cat{C}}{\cat{Set}} $ to an arrow $ \phi B = \varphi : \Nat{\homset{}{B}{-}}{F} \to FB$ as described above, is a \textbf{Natural Equivalence}.
+ \end{proposition}
+\newpage
+\begin{proof}
+	\textbf{Act 1.} : Let us first show that $ \varphi $ in \eqref{Eq-1} is indeed an isomorphism. \\\\
+	Define the following map 
+	\[I : FB \longrightarrow \Nat{\homset{}{B}{-}}{F}\]
+	which maps each set element $ k\in FB $ to the natural transformation $ \mu $ such that for any object $ A $ of category $ \cat{C} $ and for any subsequent arrow $ g \in \homset{}{B}{A} $, $ \mu $ must satisfy
+	\[(\mu A)g = Fg(k).\]
+	Note that such a map always defines a natural transformation because, for a natural transformation $ \lambda $ between $ \homset{}{B}{-} $ and $ F $, we must have that
+\[\begin{tikzcd}
+	FC & FA \\
+	{\homset{}{B}{C}} & {\homset{}{B}{A}}
+	\arrow["{\lambda C}", from=2-1, to=1-1]
+	\arrow["{\lambda A}"', from=2-2, to=1-2]
+	\arrow["Fg", from=1-1, to=1-2]
+	\arrow["{\homset{}{B}{g}}"', from=2-1, to=2-2]
+\end{tikzcd}\]
+commutes for any arrow $ g : C\to A $. Since $ C $ is any object, then let us set $ C = B $. In other words, when $ C = B $, for any arrow $ i\in \homset{}{B}{B} $, we must have $ Fg((\lambda B) i) = \lambda A (\homset{}{B}{g}(i)) $. But since $ \homset{}{B}{G}(i) = g\circ i \in  \homset{}{B}{A} $ and $ (\lambda B)(i) \in FB $, therefore this is equivalent to the condition over which we construct the map $ I $. \\\\
+We now show that $ I $ is the 2-sided inverse of $ \varphi $. \\
+Consider any natrual transformation $ \lambda \in \Nat{\homset{}{B}{-}}{F} $. Then,
+\begin{equation*}
+	\begin{split}
+		I\circ \varphi(\lambda) &= I((\lambda B)(\Id{B}))
+	\end{split}
+\end{equation*}
+But now we see that $ I((\lambda B)(\Id{B}))  = \lambda$ because $ \lambda $ satisfies the condition of $ I $ as follows:
+	\begin{align*}
+		Fg((\lambda B)(\Id{B})) &= Fg\circ \lambda B (\Id{B}) && \text{Note that $ (\lambda B)(\Id{B}) \in FB$}\\
+		&= \lambda A \circ \homset{}{B}{g} (\Id{B})\;\forall\;A \in \obj{\cat{C}}&& \text{$ \because \;\lambda$ is a natural trans.}\\
+		&= \lambda A (g\circ \Id{B})&&\\
+		&= \lambda A(g)
+	\end{align*}
+Hence, we must have that $ I((\lambda B)(\Id{B})) = \lambda $. Which implies that
+\begin{equation*}
+	\begin{split}
+		I \circ \varphi = \Id{\Nat{\homset{}{B}{-}}{F}}
+	\end{split}
+\end{equation*}
+Similarly, we now evaluate the following where $ k\in FB $ is a set element:
+\begin{equation*}
+	\begin{split}
+		\varphi\circ I (k) &= \varphi(I(k))\\
+		&= (I(k)B) (\Id{B})
+	\end{split}
+\end{equation*}
+Since $ I(k) $ is a natural transformation between $ \homset{}{B}{-} $ and $ F $ satisfying $ (I(k) A)g = Fg(k) $ for $ g : B\to A $, then, if we set $ g = \Id{B} $, then this condition reduces to
+\begin{equation*}
+	\begin{split}
+		(I(k) B)\Id{B} &= F\Id{B}(k)\\
+		&= \Id{FB} k\\
+		&= k.
+	\end{split}
+\end{equation*}
+That is, $ \varphi \circ I(k) = k $ for any $ k\in FB $. Therefore, we can write
+\[\varphi \circ I  = \Id{FB}\]
+Hence, we have that $ I $ is the 2-sided inverse of $ \varphi $.\\
+ Therefore $ \varphi $ is an isomorphism in $ \cat{Set} $.\\\\
+ \textbf{Act 2.} Now, to show $ \phi : \gamma \to \chi $ is a Natural Transformation. \\
+ We need to show that the following commutes for any arrow $ f : B \to B^{\prime} $ in $ \cat{C} $ and arrow $ \lambda : F\to F^{\prime}$ in $ \Nat{\homset{}{B}{-}}{F} $ such that $ (B,F) $ and $ (B^{\prime}, F^{\prime}) $ are two objects and $ (f,\lambda) $ is an arrow in $ \cat{C}\times\Func{\cat{C}}{\cat{Set}} $:
+	 \begin{equation}\label{Eq-3}
+	 	\begin{tikzcd}
+	 		{\gamma(B,F) = \Nat{\homset{}{B}{-}}{F}} && {\chi(B,F) = FB} \\
+	 		\\
+	 		{\gamma(B^\prime,F^\prime) = \Nat{\homset{}{B^\prime}{-}}{F^\prime}} && {\chi(B^\prime,F^\prime) = F^\prime B^\prime}
+	 		\arrow["{\phi(B,F)}", from=1-1, to=1-3]
+	 		\arrow["{\phi(B^\prime,F^\prime)}"', from=3-1, to=3-3]
+	 		\arrow["{\gamma(f,\lambda)}"', from=1-1, to=3-1]
+	 		\arrow["{\chi(f,\lambda)}", from=1-3, to=3-3]
+	 	\end{tikzcd}
+	 \end{equation}
+ To prove above's commutativity, take any $ \mu \in \Nat{\homset{}{B}{-}}{F} $, then we see that
+ \begin{align*}
+ 	\chi(f,\lambda)\circ \phi(B,F) (\mu) &=  \chi(f,\lambda)(\mu B(\Id{B}))&&\text{ By the defn. of $ \phi $}\\
+ 	&=F^{\prime} f \circ \lambda B (\mu B(\Id{B})) &&\text{By the defn. of $ \chi $}\\
+ 	&=\left ( F^\prime f \circ \lambda B \circ \mu B \right ) (\Id{B})&&\\
+ 	&= \left (\lambda B^{\prime} \circ Ff \circ \mu B\right )(\Id{B}) && \text{$ \because \;\lambda $ is a Nat. Trans.}\\
+ 	&=\left (\lambda B^{\prime} \circ \mu B^{\prime} \circ \homset{}{B}{f}\right )(\Id{B})&& \text{$ \because \;\mu$ is a Nat. Trans.}\\
+ 	&= \left (\lambda B^{\prime } \circ \mu B^{\prime} \right ) (\homset{}{B}{f} (\Id{B}))\\
+ 	&= \left (\lambda B^{\prime } \circ \mu B^{\prime} \right ) (f\circ \Id{B})&&\text{By the defn. of $ \homset{}{B}{-} $}\\
+ 	&= \left (\lambda B^{\prime } \circ \mu B^{\prime} \right )(f)
+ \end{align*}
+  Now, similarly, we can reduce the other side as follows:
+  \begin{align*}
+  	\phi(B^{\prime}, F^{\prime}) \circ \gamma (f,\lambda) (\mu)&= \phi(B^{\prime}, F^{\prime}) \left (\lambda \circ \mu \circ \homset{}{f}{-}\right )&& \text{By defn. of $ \gamma $}\\
+  	&= \left (\left (\lambda \circ \mu \circ \homset{}{f}{-}\right )(B^{\prime})\right )(\Id{B^{\prime}})&&\text{By the defn. of $ \phi $}\\
+  	&= \left (\lambda B^{\prime} \circ \mu B^{\prime} \circ \homset{}{f}{B^{\prime}}\right ) (\Id{B^{\prime}}) && \text{By the defn. of composing Nat. Trans.}\\
+  	&= \left (\lambda B^{\prime} \circ \mu B^{\prime}\right ) (\homset{}{f}{B^{\prime}}(\Id{B^{\prime}}))\\
+  	&= \left (\lambda B^{\prime} \circ \mu B^{\prime}\right )(\Id{B^{\prime}} \circ f)&& \text{By the defn. of $ \homset{}{-}{B^{\prime}} $}\\
+  	&= \left (\lambda B^{\prime} \circ \mu B^{\prime}\right )(f)
+  \end{align*}
+Therefore 
+\[\chi(f,\lambda)\circ \phi(B,F) = \phi(B^{\prime}, F^{\prime}) \circ \gamma (f,\lambda)\]
+That is, the square in \eqref{Eq-3} commutes . \\\\
+Therefore $ \phi: \gamma \to \chi $ is a Natural Transformation. But by Part 1, w proved that each component of this Natural Transformation is an Isomorphism, therefore, $ \phi $ is a Natural Equivalence between the functors $ \gamma $ and $ \chi $.
+\end{proof}
+\newpage
+
+\subsection{Yoneda Embeddings}
+An important corollary of the Yoneda Lemma appears when we consider $ F $ to be another hom-functor. 
+\begin{proposition}\label{P-3}
+	(\textbf{Yoneda Embeddings}) Consider a category $ \cat{C} $. Then,
+	\begin{enumerate}
+		\item {The Yoneda Embedding is a \textbf{full} and \textbf{faithful} contravariant functor between $ \opcat{C} $ and $ \Func{\cat{C}}{\cat{Set}} $.}
+		\item {The contravariant Yoneda Embedding, which takes an arrow $ f : A\to B$ to the natural transformation $ \homset{}{-}{A} \longrightarrow \homset{}{-}{B}$, is a \textbf{full} and \textbf{faithful} covariant functor between $ \cat{C} $ and $ \Func{\opcat{C}}{\cat{Set}} $.} 
+	\end{enumerate}
+\end{proposition}
+\begin{proof}
+	Appendix \ref{A-5} has already proved that Yoneda Embedding is a functor between $ \opcat{C} $ and $ \Func{\cat{C}}{\cat{Set}} $. Now, in the Yoneda Lemma (Proposition \ref{P-2}), if we keep $ F = \homset{}{A}{-} $ such that $ f : A\to B $ is an arrow in $ \cat{C} $, then it would result in 
+	\[\Nat{\homset{}{B}{-}}{\homset{}{A}{-}} \isomorph \homset{}{A}{B}.\]
+	That is, each of the arrow $ f : A\to B $ of $ \cat{C} $ can be represented by an unique (one-one correspondence) natural transformation between $ \homset{}{B}{-} $ and $ \homset{}{A}{-} $. Therefore, the functor takes each arrow in $ \homset{\cat{C}}{A}{B} $ to a unique arrow in $ \Nat{\homset{}{B}{-}}{\homset{}{A}{-}} $, making it faithful, and similarly, for every natural transform in $ \Nat{\homset{}{B}{-}}{\homset{}{A}{-}} $, there exists an arrow in $ \homset{}{A}{B} $, making the Yoneda Embedding a Full and Faithful Contravariant Functor.\\\\
+	The $ 2^{\text{nd}} $ result is just the dual of the $ 1^{\text{st}} $.
+\end{proof}
+
+\newpage
+\appendix
+\section{Interesting Proofs}
+\subsection{Hom Functors.}
+\label{PROOF-1}\begin{proof}
+	First note that for any arrow $ f\in \arr{\cat{C}} : B\to C$, we have $ \homset{\cat{C}}{A}{f} : \homset{\cat{C}}{A}{B} \to \homset{\cat{C}}{A}{C} $ which is clearly an arrow of category of sets $ \cat{Set} $. Now, take an object $ B\in  \obj{\cat{C}}$, then we have $ \Id{B} \in\arr{\cat{C}} $ is such that $ \homset{\cat{C}}{A}{\Id{B}} : \homset{\cat{C}}{A}{B} \to \homset{\cat{C}}{A}{B} $ which is $ \Id{\homset{\cat{C}}{A}{B}} $. Finally, take $ f:B\to C $ and $ g:C\to D $ be two arrows in $ \arr{\cat{C}} $. Also take any $ h\in \homset{\cat{C}}{A}{B} $. Then, we will have the following from the definition,
+	\begin{equation*}
+		\begin{split}
+			\homset{\cat{C}}{A}{g\circ f}(h) &= g \circ f\circ h\\
+			\homset{\cat{C}}{A}{g} \circ \homset{\cat{C}}{A}{f} (h) &= \homset{\cat{C}}{A}{g} (f\circ h)\\
+			&= g\circ f\circ h.
+		\end{split}
+	\end{equation*}
+	Hence $ \homset{\cat{C}}{A}{g\circ f} = \homset{\cat{C}}{A}{g}\circ \homset{\cat{C}}{A}{f} $, completing the proof.
+\end{proof}
+\subsection{Category of Categories \& Functors, $ \cat{Cat} $.}
+\label{PROOF-2}\begin{proof}
+	Consider the category of categories $ \cat{Cat} $ with functors as arrows between them. Take any $ F \in \arr{\cat{Cat}} $. Clearly, $ F $ has a source category $ \cat{C} $ and target category $ \cat{D} $. Take any $ \cat{C},\cat{D} \in \obj{\cat{Cat}}$ and consider $ F $ to be a functor between them in $ \arr{\cat{Cat}} $. Now take another functor $ G : \cat{B}\to \cat{C} $. We need to show that $ F \circ G $ is also an arrow of $ \cat{Cat} $. For this, we first need to prove that $ F\circ G $ is actually a functor. This is easy to see as mapping arrows to arrows and preservation of identity is simple, however, for preserving composition, consider composable $ f,g\in \arr{\cat{B}} $, therefore, $ f\circ g \in \arr{\cat{B}} $. Now, $ G(f\circ g) = Gf \circ Gg $ and then $ F(G(f\circ g))  = F(Gf\circ Gg) = FGf\circ FGg$, hence $ F\circ G $ is also a functor. Now, take any arrow $ f\in \arr{\cat{B}} $. We have $ Gf \in \arr{\cat{C}} $ and then $ FGf \in \arr{\cat{D}} $. Therefore, $ F\circ G (f) \in \arr{\cat{D}} $ or in other words, $ F\circ G : \cat{B} \to \cat{C} $, hence $ F\circ G \in \arr{\cat{Cat}} $. We also trivially have the identity functor $ F:\cat{A} \to \cat{A} $ in $ \arr{\cat{Cat}} $. Associativity of Functors also follows from the definition of their composition. Finally, any identity functor $ \Id{\cat{C}} $ and any functor $ F : \cat{C} \to \cat{D}$ in $ \arr{\cat{Cat}} $ are such that $ F\circ \Id{\cat{C}} = F$ as, for any $ f\in \arr{\cat{C}} $, we have $ F\circ \Id{\cat{C}} (f) = F(\Id{\cat{C}}(f)) = F(f) $.
+\end{proof}
+\subsection{Determinant Map is a Natural Transformation.}
+\label{PROOF-3} \begin{proof}
+	The precise statement for the fact that determinant is a natural transformation is as follows :\\
+Let $ \GL{n} $ denote the functor which takes a ring with identity to an $ n\times n $ invertible matrix with entries from that ring:
+\[\GL{n} : \cat{Ring} \longrightarrow \cat{Group}.\]
+This functor $ \GL{n} $ maps objects and arrows of $ \cat{Ring} $ as follows:
+\begin{itemize}
+	\item {$ \GL{n}(R) = M_n $, where $ R\in \obj{\cat{Ring}} $ and $ M_n\in \obj{\cat{Group}} $. Note that $ R $ is a ring with identity and $ M_n $ is the group of $ n\times n $ invertible matrices with entries from $ R $.}
+	\item {$ \GL{n}(f:R\to S) = \GL{n}f : \GL{n}(R) \to \GL{n}(S) \equiv M_n^{R} \to M_n^{S} $, where $ \GL{n}f $ is an entry-wise mapping from between matrix groups $ M_n^{R} \to M_n^{S} $ of $ f $. That is, $ \GL{n} f(m_{ij}^{R}) = m_{ij}^{S}$.}
+\end{itemize}
+This is the precise definition of $ \GL{n} $ functor. Now, the next functor to introduce is the Units functor, $ \Un $.\\
+Define the Group of Units functor $ \Un $ as follows:
+\[\Un : \cat{Ring} \longrightarrow \cat{Group}\]
+such that 
+\begin{itemize}
+	\item {$ \Un(R) = R^{\times} $ where $ R^{\times} $ is the group of units of ring $ R $\footnote{A unit of ring $ R $ is an element $ r\in R $ such that $ \inv{r}\in R$. Since $ (R,\cdot) $ is already a monoid ($ R $ is a ring with identity), therefore collection of units of $ R $ with $ (\cdot ) $ forms a group $ R^{\times} $, called group of units of $ R $.}.}
+	\item {For an arrow $ f: R\to  S$ in $ \arr{\cat{Ring}} $, functor $ \Un $ maps it to
+\[\Un f : \Un(R) \longrightarrow \Un(S) \equiv R^{\times} \longrightarrow S^{\times}\]
+	such that $ \Un f(r) = f(r) \in S^{\times} \;\forall\;r\in R^{\times}$. Note that $ R^{\times} \subseteq R $ and $ S^{\times} \subseteq S $. 
+}
+\end{itemize}
+Now, we need to show that 
+\[\lambda : \GL{n} \longrightarrow \Un\]
+which maps a matrix to it's determinant is a natural transformation.\\
+This means that $ \lambda $ is the collection of arrows, one for each ring $ R $ in $ \cat{Ring} $,
+\[\lambda R : \GL{n}R = M_n^{R} \longrightarrow \Un R= R^{\times}\]
+maps each matrix in $ M_n^{R} $ to it's determinant in $ R^{\times} $. Now consider any ring homomorphism $ g : R\to S $ in $ \cat{Ring} $. Note that for any matrix $ M\in M_n^{R} $, $ \lambda R(M) = \det(M) \in R^{\times} $ and then $ \Un f(\det(M)) = f(\det(M)) $. Similarly, $ \GL{n}f(M) = f(M) \in M_n^{S} $ element-wise and then $ \lambda S (f(M)) = \det(f(M)) $. But we know that $ f $ is a ring homomorphism, therefore $ f(\det(M)) = \det(f(M)) $. This means that
+\[\begin{tikzcd}
+	 \GL{n}R \arrow[swap]{d}{\lambda R}\arrow{r}{\GL{n}f} &\GL{n}S\arrow{d}{\lambda S}\\
+	 \Un R \arrow[swap]{r}{\Un f} &\Un S
+\end{tikzcd}\;\;\text{\textbf{commutes.}}\]
+Hence $ \lambda : \GL{n} \longrightarrow \Un $ is a natural transformation.
+\end{proof}
+\subsection{Clarity on Subobjects}
+\label{A-4}
+The subobjects of an object $ A \in \obj{\cat{C}}$ are defined as follows:
+\begin{enumerate}
+	\item {Consider the following situation. We have two monomorphisms $ u : S\rightarrowtail A $ and $ v : T\rightarrowtail A $ such that $ u $ factors through $ v $. This means that $ u = v\circ j $ for a map $ j : S\to T $.}\\
+	\item {Now, define the following relation $ \sim $ on the set of all monomorphisms with target $ A $:
+\[\text{\emph{$ u\sim v$\textbf{ if and only if }$ \exists\;  $ an isomorphism $ j : S\to T $}.}\]	
+}
+\item {We then find that this relation $ \sim $ is actually an equivalence relation:
+\begin{itemize}
+	\item {$ u\sim  u $ : We have $ \Id{S} $ as the isomorphism $ \Id{S} : S\to S $.}
+	\item {$ u\sim v \implies v\sim u $ : Since $ u\sim v $, therefore $ \exists  \;$ an isomorphism $ j : S\to T $, hence, the inverse of the isomorphism, denoted by $ j^{\prime} $ is also an isomorphism from $ T\to S $.}
+	\item {$ u\sim v \;\&\; v\sim w\implies u\sim w$ where $ w: U\to A $ : We have two isomorphisms $ j_u : S\to T $ and $ j_v : T\to U $. Their composition would be another arrow $ j_v \circ j_u : S\to U$. Since composition of isomorphisms is an isomorphism, therefore $ u\sim w $ due to $ j_v\circ j_u $. }
+\end{itemize}
+Hence $ \sim $ is an equivalence relation(!)
+}
+\item {Due to this equivalence relation $ \sim $ on the set of all monomorphisms with target $ A $, we can hence conclude that \emph{the set of all monomorphisms with target $ A $ is partitioned into equivalence classes(!)}}
+\item {In this partitioned set, any equivalence class is called a subobject of $ A $. That is, a collection of monomorphisms with target $ A $ is a subobject of $ A $ if each of the monomorphisms have source which is isomorphic to the sources of all other monomorphisms in the given subobject.\\\\
+Hence, each monomorphism to an object $ A $ in a category defines a subobject of $ A $.}
+\item {\emph{Example.} In the following diagram,
+\[\begin{tikzcd}
+	A && B \\
+	&&&& Z \\
+	D && C
+	\arrow["{f_B}"{description}, tail, from=1-3, to=2-5]
+	\arrow["{f_C}"{description}, tail, from=3-3, to=2-5]
+	\arrow["{f_A}", curve={height=-30pt}, tail, from=1-1, to=2-5]
+	\arrow["{f_D}"', curve={height=30pt}, tail, from=3-1, to=2-5]
+	\arrow[tail reversed, from=1-1, to=1-3]
+	\arrow[tail reversed, from=1-3, to=3-3]
+	\arrow[tail reversed, from=3-3, to=3-1]
+	\arrow[tail reversed, from=1-1, to=3-1]
+	\arrow[tail reversed, from=3-3, to=1-1]
+	\arrow[tail reversed, from=3-1, to=1-3]
+\end{tikzcd}\]
+the collection of monomorphisms $ f_A, f_B, f_C,f_D $ forms a subobject of $ Z $.
+}
+\end{enumerate}
+\subsection{Yoneda Embedding is a Functor.}
+\label{A-5}
+\begin{proof}
+	We need to show that the following Yoneda map
+	\[\lambda : \opcat{C} \longrightarrow \Func{\cat{C}}{\cat{Set}}\]
+	is a contravariant functor, where each arrow $ f : A\to B $ is mapped to  $ \lambda f : \homset{}{B}{-} \to \homset{}{A}{-} $ where each component of the $ \lambda f $ at object $ C $ is given by $ \lambda fC : \homset{}{B}{C}\to \homset{}{A}{C} $ which in turn is given by $ \lambda fC g = g\circ f $ for $ g\in \homset{}{B}{C} $.\\
+	To see that $ \lambda f  $ is a natural transformation (to confirm that an arrow is mapped to an arrow), simply note that for any arrow $ h : C\to C^{\prime} $, we have the following for $ a\in \homset{}{B}{C} $ :
+	\[\homset{}{A}{h}(\lambda fC a) = h\circ a\circ f = \lambda f C^{\prime} \left (\homset{}{B}{h}(a)\right )\]
+	so that 
+	\[\begin{tikzcd}
+		\homset{}{B}{C}\arrow[swap]{d}{\homset{}{B}{h}} \arrow{r}{\lambda f C} &\homset{}{A}{C}\arrow{d}{\homset{}{A}{h}}\\
+		\homset{}{B}{C^{\prime}}\arrow[swap]{r}{\lambda f C^{\prime}} &\homset{}{A}{C^{\prime}}
+	\end{tikzcd}\;\text{commutes,}\]
+and so $ \lambda f $ is a natural transformation between hom-functors $ \homset{}{B}{-} $ and $ \homset{}{A}{-} $, so that $ \lambda f $ is an arrow in $ \Func{\cat{C}}{\cat{Set}} $. \\
+Next, for any identity arrow $ \Id{B} : B\to B $, we see that $ \lambda \Id{B} : \homset{}{B}{-} \longrightarrow \homset{}{B}{-} $ is a natural transformation which takes an object $ C $ to $ \lambda \Id{B} C : \homset{}{B}{C}  \to \homset{}{B}{C}$ where $ g\in  \homset{}{B}{C} $ is taken to $ \lambda \Id{B}Cg = g\circ \Id{B} = g $, so $ \lambda \Id{B} $ is an identity natural transformation.\\
+Finally, consider two arrows $ f : A\to B $ and $ g : B\to C $ so that $ g\circ f : A\to C $ in $ \cat{C} $ are mapped by $ \lambda $ to the following natural transformations (we show the component at an object $ D $):
+\begin{equation*}
+	\begin{split}
+		\lambda g\circ f D&: \homset{}{C}{D} \to \homset{}{A}{D}\;\text{such that }\lambda g\circ f D k = k\circ (g\circ f) \;\text{for } k\in \homset{}{C}{D}\\
+			\lambda  f D&: \homset{}{B}{D} \to \homset{}{A}{D}\;\text{such that }\lambda f D j = j\circ f\;\text{for } j\in \homset{}{B}{D}\\
+				\lambda  g D&: \homset{}{C}{D} \to \homset{}{B}{D}\;\text{such that }\lambda g D i = i\circ g\;\text{for } i\in \homset{}{C}{D}
+	\end{split}
+\end{equation*}
+so that we get 
+\begin{equation*}
+	\begin{split}
+		\lambda f D\circ \lambda gD i&=\lambda fD (\lambda gD(i))\\
+		&= \lambda fD (i\circ g)\\
+		&= i\circ g\circ f 
+	\end{split}
+\end{equation*}
+and
+\begin{equation*}
+	\begin{split}
+		\lambda g\circ f D i &= i\circ g\circ f.
+	\end{split}
+\end{equation*}
+So
+\[\lambda f \circ \lambda g = \lambda g\circ f\]
+which is what we expect from a contravariant functor. Therefore, the Yoneda Embedding $ \lambda $ which \emph{embeds} each arrow of category $ \cat{C} $ to the natural transformation (arrow) in the functor category $ \Func{\cat{C}}{\cat{Set}} $ is a functor\footnote{The Proposition \ref{P-3} additionally proves that the Yoneda Embedding is Full and Faithful.}!
+\end{proof}
+%\subsection{An Interesting Functor (Sheaves!).}
+%\label{A-6}
+%
+%
+%\subsection{Godement's Rules}
+%\label{A-7}
+%Given : We have the following situation:
+%\[\begin{tikzcd}
+%	{\mathfrak{B}} && {\mathfrak{C}} && {\mathfrak{D}}
+%	\arrow[""{name=0, anchor=center, inner sep=0}, "F",  shift left=2, curve={height=-12pt}, from=1-1, to=1-3]
+%	\arrow[""{name=1, anchor=center, inner sep=0}, "G"', shift right=2, curve={height=12pt}, from=1-1, to=1-3]
+%	\arrow[""{name=2, anchor=center, inner sep=0}, "H", shift left=2, curve={height=-12pt}, from=1-3, to=1-5]
+%	\arrow[""{name=3, anchor=center, inner sep=0}, "K"', shift right=2, curve={height=12pt}, from=1-3, to=1-5]
+%	\arrow["\kappa", shorten <=4pt, shorten >=4pt, Rightarrow, from=0, to=1]
+%	\arrow["\mu", shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=3]
+%\end{tikzcd}\]
+%\emph{a.} To show 
+\newpage
+\epigraph{
+	To step from the symbol to that which is symbolized, though this does afford a peculiarly exacting demand upon acuity of thought, yet requires much more. Here, feeling, in the best sense, must fuse with thought. The thinker must learn also to feel his thought, so that, in the highest degree, he thinks devotedly. It is not enough to think clearly, if the thinker stands aloof, not giving himself with his thought. The thinker arrives by surrendering himself to Truth, claiming for himself no rights save those that Truth herself bestows upon him. In the final state of perfection, he possesses no longer opinions of his own nor any private preference. Then Truth possesses him, not he, Truth. He who would become one with the Eternal must first learn to be humble. He must offer, upon the sacrificial alter, the pride of the knower. He must become one who lays no possessive claim to knowledge or wisdom. This is the state of the mystic ignorance -- of the emptied heart. }{Franklin Merrell-Wolff, Pathways Through To Space, 1973.}
+\end{document}
+
