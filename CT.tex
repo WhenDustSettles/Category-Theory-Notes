@@ -12,6 +12,7 @@
 \usepackage[light]{CormorantGaramond}
 \usepackage{quiver}
 
+
 \usepackage{epigraph}
 %\usepackage{tgbonum}
 %\usepackage{cmbright}
@@ -88,16 +89,20 @@
 \newcommand{\elem}[1]{\in ^{#1}}
 
 \newcommand{\res}{$ \bigstar $ \textbf{Proposition.}\;}
-\newcommand{\mono}{\begin{tikzcd}
-		{} & {}
-		\arrow[tail, from=1-1, to=1-2]
-\end{tikzcd}}
-
+\newcommand{\Cone}[2]{\text{Cone}\left (#1,#2\right )}
+\newcommand{\Cocone}[2]{\text{Cocone}\left (#1,#2\right )}
+\newcommand{\ulg}[1]{\left \vert #1\right\vert }
+\newcommand{\Eq}[2]{\text{Eq}\left (#1,#2\right )}
+\newcommand{\Coeq}[2]{\text{Coeq}\left (#1,#2\right )}
+\newcommand{\src}[1]{\;\text{src}\left (#1\right )}
+\newcommand{\tar}[1]{\;\text{tar}\left (#1\right )}
+\newcommand{\colim}{\text{colim}}
+\newcommand{\ang}[1]{\left \langle #1 \right \rangle}
 
 \begin{document}
-	
 	\maketitle
 	\tableofcontents
+	\newpage
 \section{Categories}
 A category $ \cat{C} $ is a collection of two entities : \textbf{Objects}, denoted by $ \obj{\cat{C}} $ and \textbf{Arrows}, denoted by $ \arr{\cat{C}} $. Each arrow in $ \arr{\cat{C}} $ is assigned a \textbf{Domain} and a \textbf{Co-Domain} from the $ \obj{\cat{C}} $ denoted by
 \[f \in \arr{\cat{C}} \;\text{such that}\;f : A \to B\;\text{for}\;A,B\in \obj{\cat{C}}.\]
@@ -114,6 +119,17 @@ All the arrows must confirm to \textbf{Associativity under composition} and \tex
 \point\textbf{Small Categories} : When $ \arr{\cat{C}} $ is a set. ($ \implies $ The $ \obj{\cat{C}} $ is also a set.)\\\\
 \point\textbf{Homset} : Select two $ A,B\in \obj{\cat{C}} $ and then the (\textit{assumed}) set of all arrows $ f : A\to B $ in $ \arr{\cat{C}} $ is represented by $ \homset{\cat{C}}{A}{B} $.\\\\
 \point\textbf{Subcategory} : A subcategory $ \cat{D} $ of a category $ \cat{C} $ is a pair of subsets $ D_O $ and $ D_A $ of the objects and arrows of $ \cat{C} $ respectively with the property that (1.) any $ f\in D_A $ must have it's source and target in $ D_O $, (2.) if $ C\in D_O $ then $ \Id{C}\in D_A $ and (3.) if $ f,g \in D_A$ are composable then their composite $ g\circ f $ must also be in $D_A$.\\\\
+\point \textbf{Product Category} : Consider two categories $ \cat{C} $ and $ \cat{D} $. One can construct another category $ \cat{C}  \times \cat{D}$ called product category for which:
+\begin{itemize}
+	\item{\textbf{Objects} are the pairs $ (A,B) $ where $ A \in \obj{\cat{C}} $ and $ B \in \obj{\cat{D}} $.}
+	\item {\textbf{Arrows} are the pairs $ (f,g) $ where $ f : A\to A^{\prime} $ and $ g : B\to B^{\prime} $ so that we write
+\[(f,g) : (A,B) \longrightarrow (A^{\prime}, B^{\prime})\]
+as an arrow of $ \cat{C}\times \cat{D} $.	
+} 
+\item {\textbf{Composition} is defined component-wise. That is, for two composable arrows $ (f,g) $ and $ (h,k) $, we can write their composite as
+\[(f,g)\circ (h,k) = (f\circ h, g\circ k).\]
+}
+\end{itemize}
 \point\textbf{Slice Category} : A category $ \cat{C}/A $ of objects of $ \cat{C} $ \textit{over} an object $ A $ such that $ \obj{\cat{C}/A} $ is the collection of all arrows of $ \cat{C} $ with target $ A $ and for objects $ f:B\to A $ and $ g:C\to A $, there is an arrow $ h :B\to C$ in $ \arr{\cat{C}/A} $ such that $ f = g\cdot h $.
 \begin{figure}[h!]
 	\[\begin{tikzcd}
@@ -289,7 +305,7 @@ Equivalently, if there is an arrow $ g : B\to A $ such that $ f\circ g = \Id{B} 
 \end{tikzcd}\;\text{\textbf{commutes},}\]
 then we say that \emph{$ a $ factors through $ i $}. We additionally write that $ a\elem{T}_A A_0 $ to say that \emph{the element $ a  $ of $ A $ is an element of $ A_0 $.}
 \newpage
-
+\hrulefill
 \begin{proposition}\label{P-1}
 	Let $i :A_0 \to A $ and $ i^{\prime} : A_0^{\prime} \to A $ be monomorphisms in a category $ \cat{C} $. Then $ A_0 $ and $ A_0^{\prime} $ have the same elements of $ A $ if and only if there is an \textbf{isomorphism} $ j : A_0 \to A_0^{\prime} $ such that
 	\[\begin{tikzcd}
@@ -460,6 +476,8 @@ Therefore $ \phi: \gamma \to \chi $ is a Natural Transformation. But by Part 1, 
 
 \subsection{Yoneda Embeddings}
 An important corollary of the Yoneda Lemma appears when we consider $ F $ to be another hom-functor. 
+
+\hrulefill
 \begin{proposition}\label{P-3}
 	(\textbf{Yoneda Embeddings}) Consider a category $ \cat{C} $. Then,
 	\begin{enumerate}
@@ -473,6 +491,664 @@ An important corollary of the Yoneda Lemma appears when we consider $ F $ to be 
 	That is, each of the arrow $ f : A\to B $ of $ \cat{C} $ can be represented by an unique (one-one correspondence) natural transformation between $ \homset{}{B}{-} $ and $ \homset{}{A}{-} $. Therefore, the functor takes each arrow in $ \homset{\cat{C}}{A}{B} $ to a unique arrow in $ \Nat{\homset{}{B}{-}}{\homset{}{A}{-}} $, making it faithful, and similarly, for every natural transform in $ \Nat{\homset{}{B}{-}}{\homset{}{A}{-}} $, there exists an arrow in $ \homset{}{A}{B} $, making the Yoneda Embedding a Full and Faithful Contravariant Functor.\\\\
 	The $ 2^{\text{nd}} $ result is just the dual of the $ 1^{\text{st}} $.
 \end{proof}
+\hrulefill
+
+\subsection{Representable Functors}
+Another corollary of Yoneda Lemma appears when we assume that a particular natural transformation in the category $ \Nat{\homset{}{A}{-}}{F} $ is actually a Natural Equivalence, as shown now.\\\\
+\point \textbf{Universal Element} : Consider a category $ \cat{C} $, an object $ A $ of $ \cat{C} $ and a functor $ F $ in $ \Func{\cat{C}}{\cat{Set}} $. If the natural transformation corresponding to set element $u\in FA $ in $ \Nat{\homset{}{A}{-}}{F} $\footnote{Due to Yoneda Lemma.} is a natural equivalence, then $ u $ is a universal element for $ F $.\\\\
+\point \textbf{Representable Functor} : Consider a category $ \cat{C} $, an object $ A $ of $ \cat{C} $ and a functor $ F $ in $ \Func{\cat{C}}{\cat{Set}} $ such that $ u\in FA $ is a universal element. Then $ F $ is called a representable functor represented by $ A $.
+
+\hrulefill
+\begin{proposition}
+	(\textbf{Alternate Definition for Universal Elements})\footnote{This uniqueness of universality is \textbf{extremely} important!} Consider a functor $ F : \cat{C} \longrightarrow \cat{Set} $. Then,
+	\[\text{$ u\in FA $ is a universal element of $ F $} \iff \text{$ \forall\;B \in \obj{\cat{C}} $ \& $ \forall \;t\in FB $, $ \exists$ exactly one \textbf{unique} $g : A\to B \in \arr{\cat{C}} $ such that $ Fg(u) = t $.}\]
+\end{proposition}
+\begin{proof}
+	
+\end{proof}
+\hrulefill
+
+\newpage
+\section{Pullbacks}
+\point \textbf{Commutative Cone over a Diagram} : Consider the Diagram $ D $ in a category $ \cat{C} $ as follows
+\begin{equation} \label{Diag D}
+	\begin{tikzcd}
+		& B \\
+		A & C
+		\arrow["f"', from=2-1, to=2-2]
+		\arrow["g", from=1-2, to=2-2]
+	\end{tikzcd}
+\end{equation}
+Then, the pair $ (T,x,y) $ where $ T $ is an object and $ x : T\to A$, $ y:T\to B $ are arrows in $ \cat{C} $, is called a Commutative Cone over $ D $ defined by $ T $\footnote{It is sometimes useful to call such a triple $ (T,x,y) $ an \emph{element of $ D $ defined on $ T $}.} if
+\begin{equation}\label{pullback}
+	\begin{tikzcd}
+		T & B \\
+		A & C
+		\arrow["f"', from=2-1, to=2-2]
+		\arrow["g", from=1-2, to=2-2]
+		\arrow["y", from=1-1, to=1-2]
+		\arrow["x"', from=1-1, to=2-1]
+	\end{tikzcd}
+\end{equation}
+\textbf{commutes.} Moreover, the \textbf{set} of all commutative cones over $ D $ defined by $ T $ is dentoed by $ \Cone{T}{D} $.\\\\
+\point \textbf{Contravariant $ \Cone{-}{D} $ Functor} : One can define a map 
+\[\Cone{-}{D} : \opcat{C} \longrightarrow \cat{Set}\]
+such that it maps
+\begin{itemize}
+	\item {\textbf{Object} $ K $ in $ \cat{C} $ to the set of commutative cones over $ D $ defined by $ K $, 
+\[\Cone{-}{D}(K) = \Cone{K}{D}.\]	
+}
+	\item {\textbf{Arrow} $ h : T \to P $ in $ \cat{C} $ to a set function between $ \Cone{P}{D}  \to \Cone{T}{D}$ defined by
+\[\Cone{-}{D}(h)(P,x,y) = \Cone{h}{D}(P,x,y) = (T,x\circ h, y\circ h).\]	
+}
+\end{itemize}
+This map then defines a contravariant functor between $ \cat{C} $ and $ \cat{Set} $.\\\\
+\point \textbf{Pullback} : Consider the Diagram D in \eqref{Diag D}. A commutative cone $ (P,p_1,p_2) $ over $ D $ is said to be a Pullback of Diagram $ D $\footnote{Also called the \emph{Fiber Product} of Diagram $ D $.}, if 
+\[\text{$ (P,p_1,p_2) $ is a Universal Element for $ \Cone{-}{D} $.}\]
+Equivalently, expanding the definition of Universal Element means : If $ (P,p_1,p_2) $ is a pullback of diagram $ D $, then
+\begin{enumerate}
+	\item {the diagram \[\begin{tikzcd}
+			P & B \\
+			A & C
+			\arrow["f"', from=2-1, to=2-2]
+			\arrow["g", from=1-2, to=2-2]
+			\arrow["{p_2}", from=1-1, to=1-2]
+			\arrow["{p_1}"', from=1-1, to=2-1]
+		\end{tikzcd}\]
+		\textbf{commutes} and}
+	\item {for any object $ T $ in $ \cat{C} $ and for any commutative cone over $ D $ defined on $ T $, $ (T,x,y) $, there exists an unique arrow $ h : T \to P $ in $ \cat{C} $ such that the diagram
+	\begin{equation}\label{Diag pull}
+		\begin{tikzcd}
+			T \\
+			& P & B && {} \\
+			& A & C
+			\arrow["f"', from=3-2, to=3-3]
+			\arrow["g", from=2-3, to=3-3]
+			\arrow["{p_2}"', from=2-2, to=2-3]
+			\arrow["{p_1}", from=2-2, to=3-2]
+			\arrow["h"{description},dashed, from=1-1, to=2-2]
+			\arrow["x"', from=1-1, to=3-2]
+			\arrow["y", from=1-1, to=2-3]
+		\end{tikzcd}
+	\end{equation}
+\textbf{commutes}\footnote{Hence, the set of all commutative cones over $ D $ defined by $ T $ are in one-to-one correspondence to the $ \homset{}{T}{P} $.}. The Figure \eqref{Diag pull} is then called a \textbf{\textit{Pullback Diagram}}.
+}
+\end{enumerate} 
+\newpage
+
+\hrulefill
+\begin{proposition}
+	Consider the Pullback 
+	\[\begin{tikzcd}
+		P & B \\
+		A & C
+		\arrow["{p_2}", from=1-1, to=1-2]
+		\arrow["{p_1}"', from=1-1, to=2-1]
+		\arrow["f"', from=2-1, to=2-2]
+		\arrow["g", from=1-2, to=2-2]
+	\end{tikzcd} \]
+of Diagram $ D $. Then, 
+\[\begin{tikzcd}
+	T & B \\
+	A & C
+	\arrow["y", from=1-1, to=1-2]
+	\arrow["x"', from=1-1, to=2-1]
+	\arrow["f"', from=2-1, to=2-2]
+	\arrow["g", from=1-2, to=2-2]
+\end{tikzcd}\;\text{ is a Pullback of \eqref{Diag D}} \iff \exists ! \;h : T \overset{\sim}{\to} P \text{ which is an isomorphism such that }	\begin{tikzcd}
+T \\
+& P & B\\
+& A & C
+\arrow["f"', from=3-2, to=3-3]
+\arrow["g", from=2-3, to=3-3]
+\arrow["{p_2}"', from=2-2, to=2-3]
+\arrow["{p_1}", from=2-2, to=3-2]
+\arrow["h"{description},dashed, from=1-1, to=2-2]
+\arrow["x"', from=1-1, to=3-2]
+\arrow["y", from=1-1, to=2-3]
+\end{tikzcd}\text{ commutes.}\]
+\end{proposition}
+\begin{proof}
+	\textbf{L $ \implies $ R} : Given that  $ (P,p_1,p_2) $ and $ (T,x,y) $ are pullbacks. Therefore there exists an unique arrows $h : T\to P $ and $ k : P\to T $ such that 
+\[\begin{tikzcd}
+	T \\
+	& P & B \\
+	& A & C
+	\arrow["{p_1}", from=2-2, to=3-2]
+	\arrow["f"', from=3-2, to=3-3]
+	\arrow["g"', from=2-3, to=3-3]
+	\arrow["{p_2}"', from=2-2, to=2-3]
+	\arrow["h"{description}, shift right=1, dashed, from=1-1, to=2-2]
+	\arrow["x"', curve={height=6pt}, from=1-1, to=3-2]
+	\arrow["y", curve={height=-6pt}, from=1-1, to=2-3]
+	\arrow["k"{description}, shift left=2, dashed, tail reversed, no head, from=1-1, to=2-2]
+\end{tikzcd}\]
+commutes. Now consider the arrow $ h\circ k $. Since $ h$ \& $ k $ are unique, therefore $ h \circ k $ is also unique. This means that 
+\begin{align*}
+	h\circ k \circ x &= h\circ (k\circ x)\\
+	&= h\circ p_1\\
+	&= x
+\end{align*}
+Therefore, $ h\circ k \circ x = x $, but $ \Id{T} \circ x  = x$ too, but we also have that $ h\circ k$ is unique, therefore $ h\circ k = \Id{T} $. Similarly, $ k\circ h = \Id{P} $. Therefore, $ h $ and $ k $ forms a unique isomorphism between $ T $ and $ P $. \\\\
+\textbf{R $ \implies  $ L} : If $ h : T \overset{\sim}{\to} P $ is an unique isomorphism and $ (P,p_1,p_2) $ is a pullback, then for any other commutative cone $ (F,m,n) $ of $ D $, there exists a unique arrow $ k : F \to P $ such that it's corresponding Pullback diagram commutes. But since $ P $ and $ T $ are isomorphic, therefore there exists an unique arrow, formed by composition of $ k $, such that it's corresponding pullback diagram over $ (T,x,y) $ also commutes. Since $ (F,m,n) $ is any such commutative cone over $ D $, therefore $ (T,x,y) $ is also a Pullback over $ D $.
+\end{proof}
+
+\hrulefill
+\newpage
+\section{Limits}
+Last section we saw usage of term \emph{Diagram $ D $}, but we didn't formally defined what a diagram means. In the process of it's definition, we would explore the concept of limits in a category, which arises from graph theoretic viewpoint of them.
+\subsection{Graphs}
+\point \textbf{Graph} : A graph $ G $ consists of two sets and two functions on those sets:
+\begin{itemize}
+	\item {\textbf{Object} set $ O $ of nodes of $ G $,}
+	\item {\textbf{Arrow} set $ A $ of edges of $ G $, and}
+	\item {Two \textbf{functions} $ d_0,d_1 : A \to O $ such that 
+\begin{equation*}
+	\begin{split}
+		d_0(f) &= \text{Source node of edge $ f $}\\
+		d_1(f) &= \text{Target node of edge $ f $.}
+	\end{split}
+\end{equation*}	
+Therefore, a graph $ G $ can be defined as a \emph{Category without composition}.
+}
+\end{itemize}
+\point \textbf{Graph Homomorphism} : A function $ F : G\to H$ between two graphs $ G $ and $ H $ is called a graph homomorphism if it maps objects to objects, arrows to arrows such that for any edge $ f : A\to B $ in graph $ G $, $ F $ would maps $ f $ to 
+\[Ff : FA \to FB\]
+where $ FA , FB$ are nodes in $ H $ and $ Ff $ an edge in $ H $.\\\\
+\point \textbf{Underlying Graph} : Consider any category $ \cat{C} $. Clearly, there is an underlying graph corresponding to $ \cat{C} $, formed by collection of objects and arrows. This graph is called underlying graph, denoted $ \ulg{\cat{C}} $.
+\begin{itemize}
+	\item {Moreover, any functor $ F : \cat{C} \to \cat{D} $ between categories therefore forms a graph homomorphism $ \ulg{F} : \ulg{\cat{C}} \to \ulg{\cat{D}}$.}
+	\item {Hence, this provides an \textbf{underlying graph functor} $ Y $:
+\[Y : \cat{Cat} \longrightarrow \cat{Graph}\]
+between category of categories and functors to category of graph and homomorphisms.	
+}
+\end{itemize}
+\subsection{Diagrams}
+\point \textbf{Diagram} : A diagram in a category $ \cat{C} $ is a graph homomorphism 
+\[D : I \to \ulg{\cat{C}}\]
+where $ I $ is some graph called \emph{Index Graph}. The diagram $ D $ is generally referred to as the \emph{Diagram $ D $ of type $ I $}. 
+\begin{itemize}
+	\item {Equivalently, we can refer diagram $ D $ as a functor from an index category $ \cat{I} $ to $ \cat{C} $ so that we write
+\[D : \cat{I} \to \cat{C}.\]	}
+\item {Therefore any diagram of type $ \cat{I} $ is an object in the functor category $ \Func{\cat{I}}{\cat{C}} $.}
+	\item {$ D $ is called a finite diagram if both the object and arrows sets of index graph are finite.
+	}
+\end{itemize}
+\point \textbf{Natural Transformation of Diagrams} : Consider two diagrams $ D, E  : I \to \cat{C}$. A natural transformation 
+\[\lambda : D \to E\]
+between them is defined as the collection of all arrows
+\[\lambda k : Dk \to Ek \]
+where $ k $ is any node/object of $ I $ such that the following commutes for any edge $ b : i \to j $ in $ I $:
+\[\begin{tikzcd}
+	Di & Ei \\
+	Dj & Ej
+	\arrow["{\lambda i}", from=1-1, to=1-2]
+	\arrow["Eb", from=1-2, to=2-2]
+	\arrow["{\lambda j}"', from=2-1, to=2-2]
+	\arrow["Db"', from=1-1, to=2-1]
+\end{tikzcd}\]
+\newpage
+\subsection{Limits}
+\point \textbf{General Commutative Cones} : Consider a category $ \cat{C} $ and a diagram $ D : \cat{I} \to \cat{C} $, which is just a functor. Moreover, consider a constant functor $ E: \cat{I} \to \cat{C} $ such that it takes any object of $ \cat{I} $ to a constant $ W $ in $ \cat{C} $. A \textbf{commutative cone with vertex $ W $} on the diagram $ D $ is then defined as a natural transformation 
+\[\alpha : E\longrightarrow D.\]
+This is generally denoted as 
+\[cone\;\alpha : W\to D .\]
+\begin{itemize}
+	\item {Therefore, the commutative cone $ cone\;\alpha : W\to D $ is an arrow in \textbf{category of diagrams of type $ \cat{I} $}. This, in the notion of elements, can be said to be \emph{the cone $ \alpha $ is an element of diagram $ D $ defined over $ W $}, justifying the prior use of it.} 
+	\item {The \textbf{components} of the natural transformation $ \alpha $, $ \alpha i $ for object $ i $ in $ \cat{I} $, are then the arrows in $ \cat{C} $(!)}
+	\item {The naturality condition furthermore demands that if $cone\; \alpha :  W\to D$ is a commutative cone with vertex $ W $ over a diagram $ D $, then for \textbf{any} arrow $ e : i\to j $ in $ \cat{I} $, the following must commute:
+\[\begin{tikzcd}
+	& W \\
+	Di && Dj
+	\arrow["De"', from=2-1, to=2-3]
+	\arrow["{\alpha i}"', from=1-2, to=2-1]
+	\arrow["{\alpha j}", from=1-2, to=2-3]
+\end{tikzcd}\]	
+Note that the naturality square here is just a \emph{triangle} because the functor $ E $ maps any object to constant object $ W $ and any arrow to $ \Id{W} $.
+}
+\end{itemize}
+\point \textbf{Contravariant $ \Cone{-}{D} $ functor} : In the same spirit as earlier, we define cone functor as a map 
+\[\Cone{-}{D} : \opcat{C} \longrightarrow \cat{Set}\]
+such that it maps
+\begin{itemize}
+	\item {\textbf{Object} $ W $ of $ \cat{C} $ to the set of all commutative cones with vertex $ W $ over a diagram $ D $, $ \Cone{W}{D} $. Note that this set is just the collection of all natural transformations between the constant functor to $ W $ and the diagram functor of type $ \cat{I} $.}
+	\item {\textbf{Arrow} $ h : V\to W $ of $ \cat{C} $ to the set function
+\[\Cone{h}{D} : \Cone{W}{D}\longrightarrow\Cone{V}{D}\]
+	such that for any natural transformation $ \alpha \in \Cone{W}{D} $,
+	\[\Cone{h}{D}(\alpha) = \beta\]
+	where $ \beta $ is the commutative cone with vertex $ V $ whose collection of arrows is $ (\alpha i) \circ h $ for all objects $ i $ of $ \cat{I} $.}
+\end{itemize}
+\point \textbf{Limit} : Consider a diagram $ D $ of type $ \cat{I} $ in a category $ \cat{C} $. Then, the limit of $ D $, $ \lim D $, is defined as:
+\[\text{$ \lim D $ is a Universal Element of $ \Cone{-}{D} $.}\]
+\footnote{Note that the object representing the functor $ \Cone{-}{D} $ and the universal element of $ \Cone{-}{D} $ are sometimes used interchangeably when referring to the limit $ \lim D $.}Equivalently, we can say : if for \textbf{any} commutative cone $ \alpha $ with any vertex $ A $, there exists an arrow $ h : A\to W $ in $ \cat{C} $ such that $ \Cone{h}{D}(\lim D) =  \alpha$, then $ \lim D $ is called the limit of the diagram $ D $.
+
+\hrulefill
+\begin{proposition}\label{P-6}
+	Consider a diagram $ D: \cat{I} \to \cat{C} $ and let two commutative cones $ \alpha : W \to D $ and $ \beta : V \to D $ both be limits of $ D $. Then, there exists a unique isomorphism between them, $ u : V\to W $, such that
+	\[(\alpha i)\circ u = \beta i\;\text{for all objects }i\text{ of }  \cat{I} .  \]
+\end{proposition}
+\begin{proof}
+Take any two limits $ \alpha : W\to D $ and $ \beta :V\to D $ of a diagram $ D : \cat{I} \to \cat{C}$. Since $ \alpha \;\& \;\beta $ are limits, therefore they are universal elements of $ \Cone{-}{D} $. This means that there exists a \textbf{unique} arrow $ f : V\to W $ and $ g : W\to V $ such that $ \Cone{f}{D}(\alpha) = \{(\alpha i) \circ f \;:\; i \in \obj{\cat{I}}\} = \beta $ and $ \Cone{g}{D}(\beta) = \{(\beta i) \circ g\;:\;i\in \obj{\cat{I}}\} = \alpha $. Hence, we have that $ \beta i = (\alpha i) \circ f $ and $ \alpha i = (\beta i) \circ g $. Combining them gives that $ \alpha i = (\alpha i) \circ (f\circ g) $. But the same is true for $ \Id{W} $ as $ \alpha i = (\alpha i) \circ \Id{W} $. Therefore, by uniqueness of $ f\circ g $, we must have that $ f\circ g = \Id{W} $. Similarly $ g\circ  f = \Id{V} $, proving that $ f $ is an isomorphism. Therefore, there exists an isomorphism between two limits of a diagram $ D $.
+\end{proof}
+\newpage
+\point \textbf{Complete Categories\footnote{Also called \textbf{Left Exact Categories}.}} : A category $ \cat{C} $ is called complete if \emph{every} diagram in $ \cat{C} $ has a limit. Moreover, $ \cat{C} $ is called \textbf{finitely complete} if every \emph{finite} diagram in $ \cat{C} $ has a limit.
+
+\subsection{Products}
+\point \textbf{Product of objects} : Consider a category $ \cat{C} $ and two arbitrary objects $ A $ and $ B $ in it. The limit of the \emph{arrow-less} or \emph{discrete} diagram $ (A,B) $ is called the product of $ A $ and $ B $ and is thus denoted by
+\[ cone \;\alpha : A\times B \to D.\]
+That is, the product $ A \times B$ is nothing but the collection of pairs of elements of $ A $ and $ B $.
+\begin{itemize}
+	\item {It is hence clear that the product $ A\times B$ contains two \textbf{projection} arrows $ p_1 : A\times B \to A $ and $ p_2 : A\times B \to B $ such that for any $ h = (x,y) \in A\times B $,
+\begin{align*}
+	p_1(h) &= x\\
+	p_2(h) &= y
+\end{align*}	
+}
+\item {Moreover, since $ A \times B $ is the vertex of the limit of diagram $ (A,B) $, therefore more explicitly we can write the definition of product $ A \times B$ as the object in $ \cat{C} $ with the property that for \textbf{any} other commutative cone over any vertex $ W $ of diagram $ (A,B) $ with corresponding arrows $ f $ and $ g $, there exists a \textbf{unique} arrow denoted $ (f,g)$ such that the following \textbf{commutes}:
+\[\begin{tikzcd}
+	& {A\times B} \\
+	A && B \\
+	& W
+	\arrow["{(f,g)}"{description}, dashed, from=3-2, to=1-2]
+	\arrow["{p_1}"', from=1-2, to=2-1]
+	\arrow["{p_2}", from=1-2, to=2-3]
+	\arrow["f", from=3-2, to=2-1]
+	\arrow["g"', from=3-2, to=2-3]
+\end{tikzcd}\]
+where product of arrows is defined more generally as follows:}
+\end{itemize}
+\point \textbf{Product of arrows} : Product of $ f : A\to C $ and $ g : B\to D $ is defined as 
+\[f\times g = (f\circ p_1, g\circ p_2) \; : \; A\times B \longrightarrow C\times D.\]
+\begin{itemize}
+	\item {Hence, for any member $ (x,y) \in A\times B$, we have
+\[(f\times g) (x,y) = (f(x),g(y)).\]	
+}
+\end{itemize}
+\point \textbf{Product of Indexed Set of Objects} : The product of an indexed collection can be defined by extension of the above as following: Consider the indexed set of objects to be a discrete category $ \cat{I} $ without any arrows. The product of the objects in $ \cat{I} $ is then defined as the limit of the diagram $ D : \cat{I} \to \cat{C} $. This product is generally denotes as\footnote{Sometimes, for better representation, it is useful to write product as $ \prod D_i $.}
+\[\prod_{i\in \obj{\cat{I}}} Di.\]
+In a more explicit manner, the product of some indexed set of objects, regarded as discrete category $ \cat{I} $, is the object $ \prod_{i\in \cat{I}} Di$ in category $ \cat{C} $ where $ D : \cat{I}  \to \cat{C}$ is the discrete diagram, such that for any other commutative cone with any vertex $ W $ of $ \cat{C} $ over discrete diagram $ D $, there exists a unique arrow $ u : W \to \prod Di $ such that the following commutes:
+\[\begin{tikzcd}
+	&& {\prod D_i} \\
+	\\
+	{D_1} & {D_2} & \dots \\
+	&& W
+	\arrow["{p_1}"{description}, from=1-3, to=3-1]
+	\arrow["{p_2}"{description}, from=1-3, to=3-2]
+	\arrow["\dots"{description}, draw=none, from=1-3, to=3-3]
+	\arrow["{f_1}"{description}, from=4-3, to=3-1]
+	\arrow["{f_2}"{description}, from=4-3, to=3-2]
+	\arrow["{u = \prod f_i}"{description}, curve={height=12pt}, dotted, from=4-3, to=1-3]
+\end{tikzcd}\]
+\newpage
+\point \textbf{Category with Products} : A category $ \cat{C} $ is said to have products if for \textbf{any} (possibly infinite) indexed set of objects $ \cat{I} $ and for the corresponding discrete diagram $ D : \cat{I} \to \cat{C} $, the product $ \prod D_i$ exists. Equivalently, if the limit of $ D  $ exists.
+\begin{itemize}
+	\item {If the product exists only for any finite set of objects, then the category $ \cat{C} $ is said to have only \textbf{finite products}.}
+\end{itemize}
+\point \textbf{Left Exact} or \textbf{Flat Functors} : Consider a functor $ F : \cat{C} \longrightarrow\cat{D}$ where $ \cat{C} $ and $ \cat{D} $ are finitely complete categories. Then, $ F $ is called a Left Exact or a Flat Functor if it preserves finite limits.\\\\
+\point \textbf{Continuous Functor} : A functor $ F : \cat{C} \to \cat{D} $ is called continuous if for every small category diagram $ D : \cat{I} \to \cat{C} $, the functor $ F $ preserves it's limits.
+\subsection{\protect\footnote{Definitely needs more clarity.}Equalizers, Equivalent Relations \& Kernel Pairs}
+\point \textbf{Equalizer} : The equalizer of two arrows $ f,g: A\to B $ in a category $ \cat{C} $ is the limit of the diagram :
+\[\begin{tikzcd}
+	A && B
+	\arrow["f"', shift right=2, from=1-1, to=1-3]
+	\arrow["g", shift left=2, from=1-1, to=1-3]
+\end{tikzcd}\]
+and is generally denoted as $ \Eq{f}{g} $. Therefore, equalizer represents the pair of elements $ (x,y) $ where $ x\in A $ and $ y\in B $ such that $ f(x) = g(x) = y $.
+
+\hrulefill
+\begin{proposition}\label{P-7}
+	(\textbf{Projections of a Product are jointly monic}) Given two parallel arrows $ f, g : A\to B\times C $,
+	\[f = g\;\iff\; p_1\circ f = p_1 \circ g \;\&\;p_2 \circ f = p_2 \circ g.\]
+\end{proposition}
+\begin{proof}
+	L $ \implies $ R, is trivial to see. Suppose $ p_1 \circ f = p_1 \circ g : A\to B$ and $ p_2 \circ f = p_2 \circ g : A\to C$. Remember that $ B\times C $ is the limit object of the discrete diagram $ B, C $. Hence, there exists a unique arrow $ h : A\to B\times C $ such that $ p_1\circ h =  p_1 \circ f = p_1 \circ g$ and $ p_2 \circ h  = p_2 \circ f = p_2 \circ g$. Since $ h $ is unique with this property, therefore $ f=g=h$.
+\end{proof}
+\begin{remark}
+	Therefore, kernel pairs always define a subobject of the product. Here, by subobject, we mean the source of the monomorphism which defines the isomorphism class of the subobject.
+\end{remark}
+\hrulefill
+
+\newpage
+\point \textbf{Internal Equivalence Relations} : An equivalence relation on an object $ X $ of a finitely complete category $ \cat{C} $ is a subobject $ R $ of the product $ X\times X $ identified by the joint monomorphism arrow\footnote{See Proposition \ref{P-7}.} $ (s,t) : R\rightarrowtail X\times X $ such that it is further equipped with three specific arrows as follows:
+\begin{enumerate}
+	\item {\textbf{Reflexivity} : A unique arrow $\rho : X\to R $ such that 
+	\[s\circ \rho = \Id{X}\;\&\;t\circ \rho = \Id{X}.\] }
+\item {\textbf{Symmetry} : A unique arrow $ \sigma : R\to R $ such that 
+\[s\circ \sigma = t\;\&\;t\circ \sigma = s.\]}
+\item {\textbf{Transitivity} : A unique arrow $ \tau : R\times_X R \to R $ whose source is the pullback $ (R\times_X R, \tilde{s}, \tilde{t}) $ of $ t $ along $ s $ such that 
+\[s\circ \tau = s\circ \tilde{s} \;\&\; t\circ \tau = t\circ \tilde{t}.\]
+}
+\end{enumerate}
+These three arrows $ \rho, \sigma, \tau $ can be represented as the following commutative diagrams:
+% https://q.uiver.app/?q=WzAsMjUsWzIsMiwiUiJdLFsyLDQsIlgiXSxbNCw0LCJZIl0sWzQsMiwiWCJdLFszLDMsIlhcXHRpbWVzIFgiXSxbMCwwLCJYIl0sWzgsMiwiUiJdLFsxMCwyLCJYIl0sWzgsNCwiWCJdLFsxMCw0LCJZIl0sWzksMywiWFxcdGltZXMgWCJdLFs2LDAsIlIiXSxbNSwxMSwiUiJdLFs1LDEzLCJYIl0sWzcsMTEsIlgiXSxbNywxMywiWSJdLFs2LDEyLCJYXFx0aW1lcyBYIl0sWzMsOSwiUlxcdGltZXNfWFIiXSxbNSw2LCJSXFx0aW1lc19YUiJdLFs1LDgsIlIiXSxbNyw4LCJYIl0sWzcsNiwiUiJdLFszLDUsIlxccmhvLVxcdGV4dHtSZWZsZXhpdml0eX0iXSxbOSw1LCJcXHNpZ21hIC1cXHRleHR7U3ltbWV0cnl9Il0sWzYsMTQsIlxcdGF1LVxcdGV4dHtUcmFuc2l0aXZpdHl9Il0sWzAsMywidCJdLFswLDEsInMiLDJdLFsxLDIsImYiLDJdLFszLDIsImYiXSxbMCw0LCIocyx0KSIsMSx7InN0eWxlIjp7InRhaWwiOnsibmFtZSI6Im1vbm8ifX19XSxbNCwxLCJwXzEiXSxbNCwzLCJwXzIiLDJdLFs1LDAsIlxccmhvIiwxLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzUsMywiXFx0ZXh0e0lkfV9YIiwxXSxbNSwxLCJcXHRleHR7SWR9X1giLDFdLFs2LDgsInMiLDJdLFs2LDcsInQiXSxbNiwxMCwiKHMsdCkiLDEseyJzdHlsZSI6eyJ0YWlsIjp7Im5hbWUiOiJtb25vIn19fV0sWzgsOSwiZiIsMl0sWzcsOSwiZiJdLFsxMCw4LCJwXzEiXSxbMTAsNywicF8yIiwyXSxbMTEsNiwiXFxzaWdtYSIsMSx7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFsxMSw4LCJ0IiwxXSxbMTEsNywicyIsMV0sWzEyLDEzLCJzIiwyXSxbMTIsMTQsInQiXSxbMTMsMTUsImYiLDJdLFsxNCwxNSwiZiJdLFsxNiwxMywicF8xIl0sWzE2LDE0LCJwXzIiLDJdLFsxMiwxNiwiKHMsdCkiLDEseyJzdHlsZSI6eyJ0YWlsIjp7Im5hbWUiOiJtb25vIn19fV0sWzE3LDEyLCJcXHRhdSIsMSx7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFsxNywxMywic1xcY2lyYyBcXHRpbGRle3N9IiwxXSxbMTcsMTQsInRcXGNpcmMgXFx0aWxkZXt0fSIsMV0sWzIxLDIwLCJzIl0sWzE5LDIwLCJ0IiwyXSxbMTgsMjEsIlxcdGlsZGV7dH0iXSxbMTgsMTksIlxcdGlsZGV7c30iLDJdLFsxOCwyMCwiIiwxLHsic3R5bGUiOnsibmFtZSI6ImNvcm5lci1pbnZlcnNlIn19XV0=
+\[\begin{tikzcd}
+	X &&&&&& R \\
+	\\
+	&& R && X &&&& R && X \\
+	&&& {X\times X} &&&&&& {X\times X} \\
+	&& X && Y &&&& X && Y \\
+	&&& {\rho-\text{Reflexivity}} &&&&&& {\sigma -\text{Symmetry}} \\
+	&&&&& {R\times_XR} && R \\
+	\\
+	&&&&& R && X \\
+	&&& {R\times_XR} \\
+	\\
+	&&&&& R && X \\
+	&&&&&& {X\times X} \\
+	&&&&& X && Y \\
+	&&&&&& {\tau-\text{Transitivity}}
+	\arrow["t", from=3-3, to=3-5]
+	\arrow["s"', from=3-3, to=5-3]
+	\arrow["f"', from=5-3, to=5-5]
+	\arrow["f", from=3-5, to=5-5]
+	\arrow["{(s,t)}"{description}, tail, from=3-3, to=4-4]
+	\arrow["{p_1}", from=4-4, to=5-3]
+	\arrow["{p_2}"', from=4-4, to=3-5]
+	\arrow["\rho"{description}, dashed, from=1-1, to=3-3]
+	\arrow["{\text{Id}_X}"{description}, from=1-1, to=3-5]
+	\arrow["{\text{Id}_X}"{description}, from=1-1, to=5-3]
+	\arrow["s"', from=3-9, to=5-9]
+	\arrow["t", from=3-9, to=3-11]
+	\arrow["{(s,t)}"{description}, tail, from=3-9, to=4-10]
+	\arrow["f"', from=5-9, to=5-11]
+	\arrow["f", from=3-11, to=5-11]
+	\arrow["{p_1}", from=4-10, to=5-9]
+	\arrow["{p_2}"', from=4-10, to=3-11]
+	\arrow["\sigma"{description}, dashed, from=1-7, to=3-9]
+	\arrow["t"{description}, from=1-7, to=5-9]
+	\arrow["s"{description}, from=1-7, to=3-11]
+	\arrow["s"', from=12-6, to=14-6]
+	\arrow["t", from=12-6, to=12-8]
+	\arrow["f"', from=14-6, to=14-8]
+	\arrow["f", from=12-8, to=14-8]
+	\arrow["{p_1}", from=13-7, to=14-6]
+	\arrow["{p_2}"', from=13-7, to=12-8]
+	\arrow["{(s,t)}"{description}, tail, from=12-6, to=13-7]
+	\arrow["\tau"{description}, dashed, from=10-4, to=12-6]
+	\arrow["{s\circ \tilde{s}}"{description}, from=10-4, to=14-6]
+	\arrow["{t\circ \tilde{t}}"{description}, from=10-4, to=12-8]
+	\arrow["s", from=7-8, to=9-8]
+	\arrow["t"', from=9-6, to=9-8]
+	\arrow["{\tilde{t}}", from=7-6, to=7-8]
+	\arrow["{\tilde{s}}"', from=7-6, to=9-6]
+	\arrow["\ulcorner"{anchor=center, pos=0.125}, draw=none, from=7-6, to=9-8]
+\end{tikzcd}\]
+\emph{Appendix \ref{A-7} shows the result of this notion of Equivalence Relation in the $ \cat{Set} $.} 
+\newpage
+\point \textbf{Kernel Pair} : A kernel pair for an arrow $ f : A\to B $ in a category $ \cat{C} $ is the pullback of $ f $ along itself. That is, in the following, $ s,t $ is the kernel pair of $ f $:
+\[\begin{tikzcd}
+	E && A \\
+	\\
+	A && B
+	\arrow["f", from=1-3, to=3-3]
+	\arrow["f"', from=3-1, to=3-3]
+	\arrow["s"', from=1-1, to=3-1]
+	\arrow["t", from=1-1, to=1-3]
+	\arrow["\ulcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=3-3]
+\end{tikzcd}\]
+\begin{remark}
+	In $ \cat{Set} $, an equivalence relation $ (u,v) $ is the kernel pair of the class map.
+\end{remark}
+\subsection{Existence of Limits (Theorem)}
+The following theorem states the equivalent conditions for the existence of limits in a category.
+
+\hrulefill
+\begin{theorem} 
+	In any category $ \cat{C} $, the following are equivalent:
+	\begin{enumerate}
+		\item {$ \cat{C} $ has all \textbf{Finite Limits}.}
+		\item {$ \cat{C} $ has :
+	\begin{enumerate}
+		\item {a \emph{\textbf{Terminal Object}},}
+		\item {all \emph{\textbf{Equalizers}} of parallel pairs, and}
+		\item {all \emph{\textbf{Binary Products}}.}
+	\end{enumerate}	
+	}
+\item {$ \cat{C} $ has:
+	\begin{enumerate}	
+		\item {a \emph{\textbf{Terminal Object}}, and}
+		\item {all \emph{\textbf{Pullbacks}}.}
+	\end{enumerate}
+	}
+	\end{enumerate}
+This further means that a category $ \cat{C} $ has \emph{\textbf{all limits}} if and only if it has \emph{\textbf{all equalizers}} of parallel pairs and \emph{\textbf{all products}}.
+\end{theorem}
+\begin{proof}
+	\textbf{1 $ \implies $ 2 and 1 $ \implies $ 3}. Suppose $ \cat{C} $ has all finite limits. Then since terminal object is the limit of empty diagram, therefore it exists in $ \cat{C} $. Since Equalizer is the limit of any pair of parallel arrows:
+	\[\begin{tikzcd}
+		A & B
+		\arrow["f"', shift right=1, from=1-1, to=1-2]
+		\arrow["g", shift left=1, from=1-1, to=1-2]
+	\end{tikzcd}\]
+therefore it must exist too for any such pair. Finally, Binary Products are just the object representing the limit of the discrete diagram $ X , X $. \\\\
+\textbf{3 $ \implies  $ 2}. Suppose $ \cat{C} $ has a Terminal object and all Pullbacks. To see that all binary products exists, consider $ T $ to be the terminal object, therefore the pullback of the diagram $  A \overset{t_A}{\rightarrow} T \overset{t_B}{\leftarrow}B$ :
+\[\begin{tikzcd}
+	P & B \\
+	A & T
+	\arrow["{t_B}", from=1-2, to=2-2]
+	\arrow["{t_A}"', from=2-1, to=2-2]
+	\arrow["u"', from=1-1, to=2-1]
+	\arrow["v", from=1-1, to=1-2]
+	\arrow["\ulcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=2-2]
+\end{tikzcd}\]
+Since $ P $ is universal with this property (it's a Pullback), therefore $ P $ is an object equipped with two arrows $ u$ and $ v $ such that for any other object $ R $ and arrows $ a : R\to A $ and $ b : R\to B $, there exists an unique arrow $ h : R\to P $ such that $ u\circ h = a $ and $ v\circ h = b $. This is exactly what product $ A\times B $ would require. \\
+For showing that all Equalizers for any parallel pair $ f,g :A\to B $ exists, similarly consider the following pullback diagram (note that we now use the fact that products exists, as just proved):
+\[\begin{tikzcd}
+	E \\
+	& P & A \\
+	& B & {B\times B} \\
+	& B && B
+	\arrow["{(\Id{B},\Id{B})}", from=3-2, to=3-3]
+	\arrow["{(f,g)}", from=2-3, to=3-3]
+	\arrow["s", from=2-2, to=3-2]
+	\arrow["t"', from=2-2, to=2-3]
+	\arrow["b"{description}, from=1-1, to=3-2]
+	\arrow["a"{description}, from=1-1, to=2-3]
+	\arrow["h"{description}, dashed, from=1-1, to=2-2]
+	\arrow["{p_1}"{description}, from=3-3, to=4-2]
+	\arrow["{p_2}"{description}, from=3-3, to=4-4]
+\end{tikzcd}\]
+which thus implies that $ (\Id{B},\Id{B})\circ s = (f,g)\circ t $, which on simplification yields that $ s = f\circ t = g\circ t $. Since $ P $ is universal with this property, therefore it is just the $ \Eq{f}{g} $. Hence, if $ \cat{C} $ has Pullbacks and a Terminal object, then it further has all Binary Products and all Equalizers.
+\\\\
+$ \dagger $ \textbf{2 $ \implies  $ 1}. Suppose a category $ \cat{C} $ satisfies the property 2. Terminal object is present because it is present(!) Now, due to existence of terminal object and binary products, all finite products exists by induction (base step uses terminal object). Now, take any non-empty finite diagram $ D : \cat{I} \to \cat{C} $. Since all finite products exists, therefore both
+\begin{align*}
+	A &= \prod_{i \in \obj{\cat{I}}} Di \\
+	B &= \prod_{a \in \arr{\cat{I}}} D \tar{a}
+\end{align*}
+exists. Now, since all Equalizers exists, therefore, construct the following two parallel arrows $ f $ and $ g $, so that the following commutes:
+\[\begin{tikzcd}
+	{\prod_{a \in \arr{\cat{I}}} D \tar{a}} && {\prod_{i \in \obj{\cat{I}}} Di} && {\prod_{a \in \arr{\cat{I}}} D \tar{a}} && {\prod_{i \in \obj{\cat{I}}} Di} \\
+	\\
+	{D\tar{a}} && {D\src{a}} &&& {D\tar{a}}
+	\arrow["{p^{B}_{\tar{a}}}"', from=1-1, to=3-1]
+	\arrow["{p^A_{\src{a}}}", from=1-3, to=3-3]
+	\arrow["Da", from=3-3, to=3-1]
+	\arrow["f"', from=1-3, to=1-1]
+	\arrow["{p^B_{\tar{a}}}"', from=1-5, to=3-6]
+	\arrow["{p^A_{\tar{a}}}", from=1-7, to=3-6]
+	\arrow["g"', from=1-7, to=1-5]
+\end{tikzcd}\]
+Note that such $ f $ and $ g $ exists because of universality of the product objects $ A $ and $ B $ and that all objects in the diagram $ D $ which are targets of arrows of the diagram are contained in the set of all objects of the diagram. Now, we can argue about the equalizer of $ f $ and $ g $:
+\[\begin{tikzcd}
+	{\prod_{i \in \obj{\cat{I}}} Di} && {\prod_{a \in \arr{\cat{I}}} D \tar{a}}
+	\arrow["f", shift left=2, from=1-1, to=1-3]
+	\arrow["g"', shift right=2, from=1-1, to=1-3]
+\end{tikzcd}\]
+The $ \Eq{f}{g} $ would be the object such that
+\[\begin{tikzcd}
+	{\Eq{f}{g}} \\
+	\\
+	{\prod_{i \in \obj{\cat{I}}} Di} && {\prod_{a \in \arr{\cat{I}}} D \tar{a}}
+	\arrow["f", shift left=2, from=3-1, to=3-3]
+	\arrow["g"', shift right=2, from=3-1, to=3-3]
+	\arrow["s"', from=1-1, to=3-1]
+	\arrow["t", from=1-1, to=3-3]
+\end{tikzcd}\]
+commutes. This means that $ f\circ s = g\circ s = t $. But this means that by the above diagrams, the map $ s:\Eq{f}{g} \longrightarrow D$ is a commutative cone. Moreover, since $ \Eq{f}{g} $ is universal with this property, therefore, it is the limit of the diagram $ D $\footnote{Note that this proof didn't needed to be this long. Vaguely speaking, since we wanted to prove that for any diagram a limit of it exists, therefore it is natural to construct such an object first. We then see that since everything has to commute for such a limit, then it is natural to construct a product object of all such objects for which an arrow ends on it. The rest becomes trivial.}.
+\end{proof}
+\hrulefill
+\newpage
+\subsection{Preservation of Limits (Theorem)}
+\point \textbf{Limit Preserving Functor} : Consider a functor $ F : \cat{C} \to \cat{D} $ and a diagram in $ \cat{C} $ of type $ \cat{I} $, $ D : \cat{I} \to \cat{C} $. Consider the limit of $ D $ as the cone:
+\[cone\;\alpha : \lim D \to D\]
+which is the universal element of $ \Cone{-}{D} $. Then, the functor $ F $ is said to be preserving the $ \lim D $ if 
+\[cone \; F\alpha : F\lim D \to FD\]
+is the universal element of $ \Cone{-}{FD} $.
+\begin{remark}
+	Note that in the above definition:
+	\begin{enumerate}
+		\item {Since $ \alpha $ is a natural transformation between constant functor to $ \lim D $ and the $ D $, therefore $ F\alpha $ is the natural transformation $ F(\alpha i) $ for all $ i \in \obj{\cat{I}} $. }
+		\item {The $ FD $ is supposed to be the composition of functors so that the diagram $ FD $ is in $ \cat{D} $.}
+	\end{enumerate}
+\end{remark}
+\hrulefill
+\begin{theorem}
+	Consider a functor $ F : \cat{C} \to \cat{D} $ and a diagram $ D : \cat{I} \to \cat{C} $ and $ cone\;\alpha : \lim D \to D $ is the universal cone of $ D $. Then, $ F $ preserves the limit of $ D $ \textbf{if and only if} 
+	\begin{enumerate}
+		\item {$ FD $ has a limit 
+	\[cone\;\beta : \lim FD \longrightarrow FD.\]	
+	and,
+	}
+\item {$ \exists $ an isomorphism $ g : F(\lim D) \longrightarrow \lim FD $ such that for any object $ T $ of $ \cat{C} $, the following \textbf{commutes}:
+\[\begin{tikzcd}
+	{\homset{\cat{D}}{FT}{F(\lim D)}} \\
+	\\
+	{\homset{\cat{D}}{FT}{\lim FD}} && {\Cone{FT}{FD}}
+	\arrow["{\homset{\cat{D}}{FT}{g}}"', from=1-1, to=3-1]
+	\arrow["{\homset{\cat{D}}{FT}{\beta}}"', from=3-1, to=3-3]
+	\arrow["{\homset{\cat{D}}{FT}{F\alpha}}"{description}, from=1-1, to=3-3]
+\end{tikzcd}\]
+}
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+	\textbf{L $\implies$ R.} Suppose that the function $ F : \cat{C}  \to \cat{D}$ preserves limit of diagram $ D $ and any arrow $ h : T\to \lim D $. This means that $ F(\lim D) $ is the limit of $ FD $. Moreover, we have that $ \alpha \circ h $ is a cone of $ D $, therefore, $ F(\alpha \circ h) = F\alpha \circ Fh $ is a cone for diagram $FD$. By Proposition \ref{P-6}, there exists an isomorphism $ g : F(\lim D) \to \lim FD $ such that $ F(\alpha \circ h) = \beta \circ g \circ Fh $, which is just the commutative diagram in 2.\\\\
+	\textbf{R $ \implies $ L.} Suppose that $ FD $ has a limit and there exists an isomorphism $ g : F(\lim D) \to \lim FD $ such that for any arrow $ f : FT\to F(\lim D) $, 
+	\[ F\alpha = \beta \circ g \implies F\alpha \circ \inv{g} = \beta .\]
+	With this, we wish to show that $ F $ preserves the limit of $ D $, in other words, $ F(\lim D) $ is a limit of $ FD $. Clearly, $ F(\lim D) $ can be a vertex for a commutative cone over $ FD $, due to the $ F\alpha $. Now to see it's universality, take any commutative cone over $ FD $ with vertex, say $ M $, denoted by $ \gamma $. Then, by universality of $ \lim FD $, there exists a unique arrow $ m : M\to \lim FD $ such that $ \beta \circ m = \gamma $. But now, $ \inv{g} \circ m : M \to F(\lim D) $ is also unique. Moreover, we have that $\gamma = \beta \circ m = F\alpha \circ \inv{g} \circ m $. Hence, for any commutative cone over $ FD $, $ F(\lim D) $ acts as a universal element for $ \Cone{-}{FD} $, therefore $ F $ preserves limits.
+\end{proof}
+\hrulefill
+\subsection{Creation \& Reflection of Limits}
+\point \textbf{Limit Creating Functor} : Suppose $ F : \cat{C} \to \cat{D} $ is a functor and $ D : \cat{I} \to \cat{C} $ is a diagram of type $ \cat{I} $. Moreover, suppose that the limit of diagram $ FD $ in $ \cat{D} $ exists and the limiting cone is:
+\[cone\;\beta : \lim FD \longrightarrow FD.\]
+Then, $ F $ is said to be creating limits of type $ \cat{I} $ if there exists a \textbf{unique} limiting cone 
+\[cone\;\alpha : X \to D\]
+in $ \cat{C} $ such that $ F\alpha = \beta $.
+\newpage
+\point \textbf{Limit Reflecting Functor} : Suppose $ F : \cat{C} \to \cat{D} $ is a functor and $ D:  \cat{I} \to \cat{C} $ is a diagram of type $ \cat{I} $. Moreover, suppose that $ FD $ has the following limiting cone:
+\[cone \;\beta : \lim FD \to FD\]
+and there exists a cone 
+\[cone \;\alpha : X\to D\]
+in $ \cat{C} $ such that $ F\alpha = \beta $. Then, $ F $ is said to reflect the limits of type $ \cat{I} $ if $ \alpha $ is the limiting cone of $ D $.
+
+\hrulefill
+
+\emph{Typeset the answers to the questions solved in the diary when the time permits.}
+\newpage
+\section{Duality}
+Most of the concepts defined earlier in these notes actually have a dual concept. We now state them in full detail.\\\\
+\point \textbf{Dual Concepts} : Consider a category $ \cat{C} $. A dual concept is then the same concept but in opposite category $ \opcat{C} $. Some of such concepts are:
+\begin{enumerate}
+	\item {\textbf{Commutative Cocone} : Suppose a diagram $ D: \cat{I} \to \cat{C} $. A commutative cocone \emph{from} the diagram $ D $ to a vertex $ W $ is a natural transformation 
+\[cocone\;\alpha : D\to W.\]	
+Note that the set of commutative cocones with vertex $ W $ from a diagram $ D $ is denotes as
+\[\Cocone{D}{W}.\]
+Hence, $ \Cocone{D}{-} : \cat{C} \to \cat{Set} $ is a covariant functor by composition.
+} 
+\item {\textbf{Colimit} : Suppose a diagram $ D : \cat{I} \to \cat{C} $ is given. A colimit of $ D $ is then 
+\[\text{Colimit of $ D $ is the Universal Element of $ \Cocone{D}{-} $.}\]
+Expanding this, it means that for any object $ W $ of $ \cat{C} $ and any commutatuve cocone $ \alpha \in \Cocone{D}{W}$, there exists a unique arrow $ f : \colim D \to W $ such that $ \Cocone{D}{f}(\beta) = \alpha  $ where $ \beta : D \to \colim D$ is the colimiting cocone and $ \colim D $ is the vertex of this cocone $ \beta $. 
+} 
+\item {\textbf{Sum} or \textbf{Coproduct}: Consider a discrete diagram $ (A,B) $ in $ \cat{C} $ where $ A $ and $ B $ are any of it's objects. Then, the coproduct of $ A $ and $ B $ is given by the colimit of the discrete diagram $ (A,B) $ and as such is denoted by either $ A+B $ or $ A \coprod B $.\\\\
+Expanding the definition, coproduct $ A\amalg B $ is the vertex of the colimiting cocone over the discrete diagram $ (A,B) $. That is, for any object $ W $ which has arrows $ f : A \to W $ and $ g : B \to W $, there exists a unique arrow $ \ang{f,g} : A\amalg B \to W $ such that $ \ang{f,g}\circ i_1 = f$ and $ \ang{f,g}\circ i_2 = g $ where $ i_1 : A \to A\amalg B$ and $ i_2 : B \to A\amalg B $ are the two \textbf{injection arrows} for $ A\amalg B $. That is, the following commutes:
+\[\begin{tikzcd}
+	& {A\amalg B} \\
+	A && B \\
+	& W
+	\arrow["{i_1}", from=2-1, to=1-2]
+	\arrow["{i_2}"', from=2-3, to=1-2]
+	\arrow["f"', from=2-1, to=3-2]
+	\arrow["g", from=2-3, to=3-2]
+	\arrow["{\langle f,g\rangle}"{description}, dashed, from=1-2, to=3-2]
+\end{tikzcd}\]}
+\item {\textbf{Coequalizer} : Consider two parallel arrows $ f,g : A\to B $ in a category $ \cat{C} $. The Coequalizer is then defined as the colimit of the diagram:
+\[\begin{tikzcd}
+	A && B
+	\arrow["g"', shift right=2, from=1-1, to=1-3]
+	\arrow["f", shift left=2, from=1-1, to=1-3]
+\end{tikzcd}\]
+Again, expanding the definition, this means that coequalizer of $ f $
+ and $ g $ is the arrow $ h : B\to W $ such that 
+\begin{itemize}
+	\item {$ h\circ f = h\circ g $, }
+	\item {For any object $ X $ which has arrows $ s: B\to X $ with the property that $ s\circ f = s\circ g $, then there exists a unique arrow $ k : W \to X $ such that $ s = k\circ h $.}
+\end{itemize}
+} 
+\item {\textbf{Pushout} : This is the dual concept to pullbacks. Consider the following diagram in any category $ \cat{C} $:
+\[\begin{tikzcd}
+	W \\
+	\\
+	&& P && B \\
+	\\
+	&& A && C
+	\arrow["g"', from=5-5, to=3-5]
+	\arrow["f", from=5-5, to=5-3]
+	\arrow["{i_1}", from=5-3, to=3-3]
+	\arrow["{i_2}"', from=3-5, to=3-3]
+	\arrow["s", from=5-3, to=1-1]
+	\arrow["t"', from=3-5, to=1-1]
+	\arrow["h"{description}, dashed, from=3-3, to=1-1]
+\end{tikzcd}\]
+The commutation of this for any such object $ W $ makes $ P $ the pushout of $ A\overset{f}{\leftarrow }C \overset{g}{\rightarrow } B $.
+} 
+\item {\textbf{Preservation} : A functor which preserves finite colimits is called a \textbf{right-exact} functor. Similarly, a functor is \textbf{cocontinuous} if it preserves colimits of all small diagrams.}
+\end{enumerate}
+\subsection{Regularity}
+\begin{proposition}\label{P-8}
+	Every Equalizer is a Monomorphism.
+\end{proposition}
+\begin{proof}
+	Take any parallel pair of arrows $ f,g : A\to B $. Then take it's Equalizer, denoted as $ e : E \to A$, which would thus have the property that $ f\circ e = g\circ e $ and $ E $ is universal with this property. Hence, take any other object $ W $ which has two arrows $ s,t : W \to E $. Therefore, suppose $ e\circ s = e\circ t : W \to A $ are two arrows, for which we can see they satisfies:
+	\begin{align*}
+		f\circ (e\circ s) &= (f\circ e)\circ s\\
+		&= (g\circ e)\circ s\\
+		f\circ (e\circ t) &= (f\circ e)\circ t\\
+		&= (g\circ e)\circ t
+	\end{align*}
+Therefore, there must exist a unique arrow $ p : W\to E $ such that $ e\circ p = e\circ s = e\circ t$. But $ s, t $ are already two arrows with this property, therefore, it must be that $ s= t =p $. Hence, $ e\circ s = e\circ t $ implies $ s = t $, so, $ e $ is a monomorphism.
+\end{proof}
+\hrulefill
+
+\point \textbf{Regular Monomorphism} : The Equalizer of two parallel arrows, which is a monomorphism (Proposition \ref{P-8}), is called a regular monomorphism.\\\\
+\point \textbf{Regular Epimorphism} : The Coequalizer of two parallel arrows, which is a epimorphism (Dual of Proposition \ref{P-8}), is called a regular epimorphism.\\\\
+\point \textbf{Regular Category} : A category $ \cat{C} $ is called regular if it satisfies:
+\begin{enumerate}
+	\item {Every finite diagram has a \textbf{Limit},}
+	\item {Every parallel pair of arrows has a \textbf{Coequalizer},}
+	\item {$ \dagger $ For any pullback square
+\[\begin{tikzcd}
+	A & B \\
+	C & D
+	\arrow["f", from=1-1, to=1-2]
+	\arrow["h", from=1-2, to=2-2]
+	\arrow["k"', from=2-1, to=2-2]
+	\arrow["g"', from=1-1, to=2-1]
+\end{tikzcd}\]
+where $ h : B\to D $ is a\textbf{ regular epimorphism}, then it's pullback $ g: A \to C $ must also be a \textbf{regular epimorphism}.	
+}
+\end{enumerate} 
+\subsubsection{A striking result : Arrow Factorization Theorem in Regular Categories}
+\begin{theorem}
+	In a regular category $ \cat{C} $, \textbf{\emph{any arrow}} $ f $ can be written as
+	\[f = m\circ e\]
+	where $ m $ is a \textbf{monomorphism} and $ e $ is a \textbf{regular epimorphism}.
+\end{theorem}
+\begin{proof}
+\emph{Proof in Diary, $ 7^{th} $ April, 2020.}
+\end{proof}
+\hrulefill
+
+
 
 \newpage
 \appendix
@@ -564,6 +1240,16 @@ Hence, each monomorphism to an object $ A $ in a category defines a subobject of
 the collection of monomorphisms $ f_A, f_B, f_C,f_D $ forms a subobject of $ Z $.
 }
 \end{enumerate}
+\subsubsection{Subobjects as Limits of $ g : A\to B $}
+It's not difficult to see that \textbf{the}\footnote{All limits of a given diagram are isomorphic, Proposition \ref{P-6}.} limit of the diagram $ g: A\to B $ is the commutative cone with vertex $ A $ with components $ \Id{A} $ and $ g $ itself, that is:
+\[\begin{tikzcd}
+	& A \\
+	A & {} & B
+	\arrow["g"', from=2-1, to=2-3]
+	\arrow["{\Id{A}}"', from=1-2, to=2-1]
+	\arrow["g", from=1-2, to=2-3]
+\end{tikzcd}\]
+commutes, to make the natural transformation associated with $ A $ the limit of $ g : A\to B $. Now, if it so happens that $ g : A\rightarrowtail  B$ is a monomorphism, then, due to universality of the limit, any other commutative cone acting as the limit of $ g : A\rightarrowtail B $ would be isomorphic to $ A $ (Proposition \ref{P-6}). That is, for any other limit on vertex $ W $, we would have an isomorphism $ f : W\to A $. Therefore all the monomorphisms with this property would have to be the limit of $ g : A\rightarrowtail B $, which is just the definition of subobject.
 \subsection{Yoneda Embedding is a Functor.}
 \label{A-5}
 \begin{proof}
@@ -605,6 +1291,46 @@ So
 \[\lambda f \circ \lambda g = \lambda g\circ f\]
 which is what we expect from a contravariant functor. Therefore, the Yoneda Embedding $ \lambda $ which \emph{embeds} each arrow of category $ \cat{C} $ to the natural transformation (arrow) in the functor category $ \Func{\cat{C}}{\cat{Set}} $ is a functor\footnote{The Proposition \ref{P-3} additionally proves that the Yoneda Embedding is Full and Faithful.}!
 \end{proof}
+\subsection{Products of Objects}
+\[\text{\emph{	In a group regarded as a category with one object, the products don't exists unless the group has only one element.}}\]
+\begin{proof}
+	This can be seen by the following limit of a discrete diagram in the given group as a category, assuming the product exists in the group with more than one element, so that the following commutes:
+	\[\begin{tikzcd}
+		& {*\times * = *} \\
+		{*} && {*} \\
+		& {*}
+		\arrow["{f_k = p_1}"', from=1-2, to=2-1]
+		\arrow["{f_l=p_2}", from=1-2, to=2-3]
+		\arrow["{f_g\times f_h}"{description}, dashed, from=3-2, to=1-2]
+		\arrow["{f_g}", from=3-2, to=2-1]
+		\arrow["{f_h}"', from=3-2, to=2-3]
+	\end{tikzcd}\]
+	where $ *\times * = * $ because there is only one object in the whole category and we regard $ f_k $ and $ f_l $ as the projection arrows of the product object. Since the above diagram commutes, therefore,
+	\begin{equation*}
+		\begin{split}
+			f_k \circ (f_g\times f_h) &= f_g\\
+			f_l \circ (f_g \times f_h) &= f_h
+		\end{split}
+	\end{equation*}
+	where $ f_g $ and $ f_h $ are any arrows. Suppose $ f_g = f_h = \Id{*}$. Hence, 
+	\begin{equation*}
+		\begin{split}
+			f_g\times f_h &= f_{\inv{k}}\\
+			f_g\times f_h &= f_{\inv{l}}.
+		\end{split}
+	\end{equation*}
+	Therefore,
+	\[ f_{\inv{k}} = f_{\inv{l}} \]
+	which implies that
+	\[f_k = f_l.\]
+	But we initially fixed our choice of $ f_k $ and $ f_l $ (note they are components of the limit of the discrete diagram), therefore if we take any arbitrary $ f_g $ and $ f_h $ such that $ f_g\neq f_h $, since we know above diagram would commute for this, we get that $ f_g = g_h $ since $ f_g\times f_h $ is unique. Hence, we have a contradiction to the assumption that group has more than one element and product still exists. Hence product exists only in group with one element.
+\end{proof}
+\[\text{\emph{The Direct Product of two groups is the product in $ \cat{Group} $.}}\]
+\begin{proof}
+	
+\end{proof}
+\subsection{Internal Equivalence Relation in $ \cat{Set} $.}
+\label{A-7}
 %\subsection{An Interesting Functor (Sheaves!).}
 %\label{A-6}
 %
@@ -625,5 +1351,11 @@ which is what we expect from a contravariant functor. Therefore, the Yoneda Embe
 \newpage
 \epigraph{
 	To step from the symbol to that which is symbolized, though this does afford a peculiarly exacting demand upon acuity of thought, yet requires much more. Here, feeling, in the best sense, must fuse with thought. The thinker must learn also to feel his thought, so that, in the highest degree, he thinks devotedly. It is not enough to think clearly, if the thinker stands aloof, not giving himself with his thought. The thinker arrives by surrendering himself to Truth, claiming for himself no rights save those that Truth herself bestows upon him. In the final state of perfection, he possesses no longer opinions of his own nor any private preference. Then Truth possesses him, not he, Truth. He who would become one with the Eternal must first learn to be humble. He must offer, upon the sacrificial alter, the pride of the knower. He must become one who lays no possessive claim to knowledge or wisdom. This is the state of the mystic ignorance -- of the emptied heart. }{Franklin Merrell-Wolff, Pathways Through To Space, 1973.}
+\begin{equation*}
+	\begin{split}
+		\text{Trivial Things must be Trivially Trivial.}&\\
+		&\text{-Tenet of Category Theory}
+	\end{split}
+\end{equation*}
 \end{document}
 
