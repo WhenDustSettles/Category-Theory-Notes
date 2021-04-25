@@ -11,7 +11,7 @@
 \usepackage{mathpazo}
 \usepackage[light]{CormorantGaramond}
 \usepackage{quiver}
-
+\usepackage{bm}
 
 \usepackage{epigraph}
 %\usepackage{tgbonum}
@@ -786,7 +786,7 @@ In a more explicit manner, the product of some indexed set of objects, regarded 
 \end{itemize}
 \point \textbf{Left Exact} or \textbf{Flat Functors} : Consider a functor $ F : \cat{C} \longrightarrow\cat{D}$ where $ \cat{C} $ and $ \cat{D} $ are finitely complete categories. Then, $ F $ is called a Left Exact or a Flat Functor if it preserves finite limits.\\\\
 \point \textbf{Continuous Functor} : A functor $ F : \cat{C} \to \cat{D} $ is called continuous if for every small category diagram $ D : \cat{I} \to \cat{C} $, the functor $ F $ preserves it's limits.
-\subsection{\protect\footnote{Definitely needs more clarity.}Equalizers, Equivalent Relations \& Kernel Pairs}
+\subsection{Equalizers, Equivalence Relations \& Kernel Pairs}
 \point \textbf{Equalizer} : The equalizer of two arrows $ f,g: A\to B $ in a category $ \cat{C} $ is the limit of the diagram :
 \[\begin{tikzcd}
 	A && B
@@ -809,7 +809,7 @@ and is generally denoted as $ \Eq{f}{g} $. Therefore, equalizer represents the p
 \hrulefill
 
 \newpage
-\point \textbf{Internal Equivalence Relations} : An equivalence relation on an object $ X $ of a finitely complete category $ \cat{C} $ is a subobject $ R $ of the product $ X\times X $ identified by the joint monomorphism arrow\footnote{See Proposition \ref{P-7}.} $ (s,t) : R\rightarrowtail X\times X $ such that it is further equipped with three specific arrows as follows:
+\point \textbf{Internal Equivalence Relations}\label{IER} : An equivalence relation on an object $ X $ of a finitely complete category $ \cat{C} $ is a subobject $ R $ of the product $ X\times X $ identified by the joint monomorphism arrow\footnote{See Proposition \ref{P-7}.} $ (s,t) : R\rightarrowtail X\times X $ such that it is further equipped with three specific arrows as follows:
 \begin{enumerate}
 	\item {\textbf{Reflexivity} : A unique arrow $\rho : X\to R $ such that 
 	\[s\circ \rho = \Id{X}\;\&\;t\circ \rho = \Id{X}.\] }
@@ -1147,12 +1147,133 @@ where $ h : B\to D $ is a\textbf{ regular epimorphism}, then it's pullback $ g: 
 \emph{Proof in Diary, $ 7^{th} $ April, 2020.}
 \end{proof}
 \hrulefill
+\subsection{Exact Categories}
+\point \textbf{Effective/Congruent Equivalence Relation} : An Equivalence Relation \ref{IER} $ (s,t) : R \rightarrowtail X\times X$ is called Effective or Congruent if $ s $ and $ t $ forms a kernel pair for some arrow $ f : X\to Y $ in $ \cat{C} $.\\\\
+\point \textbf{Exact Category} : A category $ \cat{C} $ is called exact if it is regular and every equivalence relation is a congruence. That is, each equivalence relation is a kernel pair for some arrow.
+\begin{proposition}
+	We have the following two results:
+	\begin{itemize}
+		\item {If $ \cat{C} $ is a \textbf{Regular} category, then for any object $ A $, the slice category $ \cat{C}/A $ is also \textbf{Regular}.}
+		\item {If $ \cat{C} $ is an \textbf{Exact} category, then for any object $ A $, the slice category $ \cat{C}/A $ is also \textbf{Exact}.}
+	\end{itemize}
+\end{proposition}
+\hrulefill
+\newpage
+\section{Adjoint Functors}
+\point \textbf{Hom-functor with two arguments} : In a category $ \cat{C} $, a hom-functor in two arguments can be defined as a functor between:
+\[\homset{\cat{C}}{-}{-} : \opcat{C}\times \cat{C} \longrightarrow \cat{Set}\]
+where $ \homset{\cat{C}}{-}{-}(A,B) = \homset{\cat{C}}{A}{B} $ for objects $ A $ and $ B $ of $ \cat{C} $ and $ \homset{\cat{C}}{-}{-}(f,g) = \homset{\cat{C}}{f}{g} $ for $ f: A\to B $ and $ g: C\to D $ which is the following set function:
+\begin{align*}
+	\homset{\cat{C}}{f}{g} &: \homset{\cat{C}}{B}{C}\to \homset{\cat{C}}{A}{D}\\
+	&\text{where, for any $ h:B\to C $,}\\
+	&\homset{\cat{C}}{f}{g}(h) = g\circ h\circ f : A\to D
+\end{align*}
+\point \textbf{Adjoint Functors} : Suppose $ \cat{C} $ and $ \cat{D} $ are two given categories with $ L:\cat{C}\longrightarrow\cat{D} $ and $ R:\cat{D}\longrightarrow\cat{C} $ be two functors between them. Then, one defines $ L $ to be the Left Adjoint of $ R $ and $ R $ to be the Right Adjoint of $ L $ if there exists a \textbf{natural isomorphism} 
+\begin{align*}
+	\alpha :   \homset{\cat{D}}{L(-)}{-} \overset{\isomorph}{\longrightarrow} \homset{\cat{C}}{-}{R(-)}.
+\end{align*}
+The naturality condition means that for any arrows $ f : A\to B $ in $ \cat{C} $ and $ g : C\to D $ in $ \cat{D} $, the following natural square \textbf{commutes}:
+\[\begin{tikzcd}
+	{\homset{\cat{C}}{LB}{C}} && {\homset{\cat{D}}{B}{RC}} \\
+	\\
+	{\homset{\cat{C}}{LA}{D}} && {\homset{\cat{D}}{A}{RD}}
+	\arrow["{\homset{\cat{C}}{Lf}{g}}"', from=1-1, to=3-1]
+	\arrow["{\homset{\cat{D}}{f}{Rg}}", from=1-3, to=3-3]
+	\arrow["{\alpha(B,C)}", from=1-1, to=1-3]
+	\arrow["{\alpha(A,D)}"', from=3-1, to=3-3]
+	\arrow["\isomorph"', from=1-1, to=1-3]
+	\arrow["\isomorph", from=3-1, to=3-3]
+\end{tikzcd}\]
+One denotes that $ L $ and $ R $ are adjoint by the following:
+\[\begin{tikzcd}
+	{\cat{C}} && {\cat{D}}
+	\arrow[""{name=0, anchor=center, inner sep=0}, "R", shift left=2, from=1-3, to=1-1]
+	\arrow[""{name=1, anchor=center, inner sep=0}, "L", shift left=2, from=1-1, to=1-3]
+	\arrow["\dashv"{anchor=center, rotate=-90}, draw=none, from=1, to=0]
+\end{tikzcd}\]
+\textbf{\emph{Remark}} : Suppose $ L $ and $ R $ are the given two adjoint functors, then, since for any object $ A $ of $ \cat{C} $ and $ B $ of $ \cat{D} $, the sets $ \homset{\cat{C}}{A}{RB} $ and $ \homset{\cat{D}}{LA}{B} $ are isomorphic, therefore the arrow $ g : LA \to B $ in $ \homset{\cat{D}}{LA}{B} $, corresponding to $ f : A\to RB $ in $ \homset{\cat{C}}{A}{RB} $, is called the \textbf{adjoint transpose} of $ f $. That is, $ g $ is called adjoint transpose of $ f $, and vice-versa.\\\\
+\point \textbf{Unit \& Counit of Adjoint} : Suppose $ L : \cat{C}\to \cat{D} $ and $ R : \cat{D} \to\cat{C}$ are adjoint functors. Then, for any object $ A$ in $ \cat{C} $, we would have
+\[\homset{\cat{C}}{A}{RLA} \overset{\isomorph}{\longrightarrow} \homset{\cat{D}}{LA}{LA}.\]
+Therefore, the adjoint transpose of $ \Id{LA} : LA\to LA  $ in $ \homset{\cat{D}}{LA}{LA} $, which would be, say, $ \bar{\Id{LA}} : A\to RLA $, is called the \textbf{unit of the adjunction at object $ A $} of $ \cat{C} $. Perhaps, one can write the\textbf{\emph{ \underline{unit as a natural transformation}}} $ \eta : \Id{\cat{C}}\longrightarrow R\circ L$ so that for any object $ A $ of $ \cat{C} $, $ \eta A : A \to RLA $.\\\\
+Similarly, the adjoint transpose of $ \Id{RB} : RB \to RB$ in $ \homset{\cat{C}}{LRB}{B} $ is called the \textbf{counit of the adjunction at object $ B $} of $ \cat{D} $. Similar to above, \textbf{\emph{\underline{counit is the natural transformation}}} $ \epsilon : L\circ R \longrightarrow \Id{\cat{D}} $.
+\newpage
+\subsection{Results on Adjoint Functors}
+\textbf{\emph{Remark}}. Suppose $ L: \cat{C}\longrightarrow \cat{D}$ and $ R : \cat{D}\to \cat{C} $ are adjoint functors. Hence, for any object $ C $ of $ \cat{C} $ we would have a natural bijection of the sort
+\[ \alpha_2 : \homset{\cat{D}}{LC}{-} \overset{\isomorph}{\longrightarrow} \homset{\cat{C}}{C}{R(-)}.\]
+By Yoneda Lemma, we must therefore have a universal element for the functor $ \homset{\cat{C}}{C}{R(-)} $, in the set $ \homset{\cat{C}}{C}{RLC} $, to which the above natural bijection corresponds to. Hence, $ LC $ would be the object representing $ \homset{\cat{C}}{C}{R(-)} $ and the corresponding universal element is just the unit evaluated at $ C $, $ \eta C : C \to RLC $.
+
+\subsubsection{Point-wise Construction of Adjoints}
+\hrulefill
+\begin{theorem}
+	Consider $ \cat{C} $ and $ \cat{D} $ are two categories.
+	\begin{enumerate}
+		\item {If $ R : \cat{D} \longrightarrow \cat{C}$ is a functor, then: 
+	\[\text{$\forall \;C \in \obj{\cat{C}}\;,\;\; \homset{\cat{C}}{C}{R(-)} $ is \textbf{Representable} $ \implies $ $ R $ has a \textbf{Left Adjoint}.}\]	
+	}
+\item {If $ L : \cat{C}\longrightarrow\cat{D} $ is a functor, then:
+\[\text{$ \forall\; D \in \obj{\cat{D}} $, $ \homset{\cat{D}}{L(-)}{D} $ is \textbf{Representable} $ \implies $ $ L $ has a \textbf{Right Adjoint}.}\]
+}
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+	\emph{Written in Diary at $ 4^{th} $ March, 2020.}
+\end{proof}
+\hrulefill
+\subsubsection{Adjoints preserves (co)limit}
+\begin{theorem}\label{T-5}
+	Suppose $ L : \cat{C}\longrightarrow \cat{D} $ and $ R : \cat{D} \longrightarrow \cat{C} $ are Adjoint Functors. Then,
+	\begin{enumerate}
+		\item{$ R $ \textbf{preserves limit} of any finite diagram in $ \cat{D} $.}
+		\item{$ L $ \textbf{preserves colimit} of any finite diagram in $ \cat{C} $.}
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+	\emph{Written in Diary at $ 29^{th} $ February, 2020.}
+\end{proof}
+\hrulefill
+\subsubsection{$ \bigstar $ Freyd's Adjoint Functor Theorem}
+\point \textbf{Solution Set Condition} : Suppose $ R : \cat{D} \longrightarrow\cat{C} $ is a functor. Then $ R $ is said to follow the Solution Set Condition if $ \forall \;C\in \obj{\cat{C}}$, $ \exists $ a set $ S_C $ called the solution set of $ C $
+\[S_C = \{(y,B)\;\vert\; y : C\to RB\;,\;\;B\in \obj{\cat{D}}\}\]
+such that for any arrow $ z : C\to RD $, $ \exists \;(y,B) \in S_C$ and $ f: B\to D \in \arr{\cat{D}}$ for which the following commutes:
+\[\begin{tikzcd}
+	C & RB \\
+	& RD
+	\arrow["y", from=1-1, to=1-2]
+	\arrow["z"', from=1-1, to=2-2]
+	\arrow["Rf", from=1-2, to=2-2]
+\end{tikzcd}\] 
+\point \textbf{Weak Universal Arrow} : Suppose $ R : \cat{D} \longrightarrow\cat{C}$ is a right adjoint functor. Also suppose that the solution set of $ R $ for any object $ C $ is simply a singleton, given by $ S_C =  \{(y,B)\}$. With this, one will see that the arrow $ y : C \to RB $ acts as a universal element of $ \homset{\cat{C}}{C}{R(-)} $ but without the uniqueness condition. Hence, $ y $ is called a weak universal arrow for $ R $ and $ C $.
+
+\hrulefill
+\begin{theorem}
+	(\textbf{Freyd's Adjoint Functor Theorem}) Suppose $ \cat{D} $ is a category with all limits. Then,
+	\begin{align*}
+		\text{Functor $ R : \cat{D} \longrightarrow \cat{C} $ has a \textbf{Left Adjoint} } \bm{\iff} &\text{ $ \bm{1.} $ $ R $ preserves all \textbf{Limits}, and}\\
+		 &\text{ $ \bm{2.} $ $ R $ satisfies the\textbf{ Solution Set Condition}}
+	\end{align*}
+\end{theorem}
+\begin{proof}
+	\emph{Discussed in Appendix \ref{A-8}.}
+\end{proof}
+\hrulefill
+ 	
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 \newpage
-\appendix
-\section{Interesting Proofs}
+\appendix\section{Interesting Proofs}
 \subsection{Hom Functors.}
 \label{PROOF-1}\begin{proof}
 	First note that for any arrow $ f\in \arr{\cat{C}} : B\to C$, we have $ \homset{\cat{C}}{A}{f} : \homset{\cat{C}}{A}{B} \to \homset{\cat{C}}{A}{C} $ which is clearly an arrow of category of sets $ \cat{Set} $. Now, take an object $ B\in  \obj{\cat{C}}$, then we have $ \Id{B} \in\arr{\cat{C}} $ is such that $ \homset{\cat{C}}{A}{\Id{B}} : \homset{\cat{C}}{A}{B} \to \homset{\cat{C}}{A}{B} $ which is $ \Id{\homset{\cat{C}}{A}{B}} $. Finally, take $ f:B\to C $ and $ g:C\to D $ be two arrows in $ \arr{\cat{C}} $. Also take any $ h\in \homset{\cat{C}}{A}{B} $. Then, we will have the following from the definition,
@@ -1167,7 +1288,8 @@ where $ h : B\to D $ is a\textbf{ regular epimorphism}, then it's pullback $ g: 
 \end{proof}
 \subsection{Category of Categories \& Functors, $ \cat{Cat} $.}
 \label{PROOF-2}\begin{proof}
-	Consider the category of categories $ \cat{Cat} $ with functors as arrows between them. Take any $ F \in \arr{\cat{Cat}} $. Clearly, $ F $ has a source category $ \cat{C} $ and target category $ \cat{D} $. Take any $ \cat{C},\cat{D} \in \obj{\cat{Cat}}$ and consider $ F $ to be a functor between them in $ \arr{\cat{Cat}} $. Now take another functor $ G : \cat{B}\to \cat{C} $. We need to show that $ F \circ G $ is also an arrow of $ \cat{Cat} $. For this, we first need to prove that $ F\circ G $ is actually a functor. This is easy to see as mapping arrows to arrows and preservation of identity is simple, however, for preserving composition, consider composable $ f,g\in \arr{\cat{B}} $, therefore, $ f\circ g \in \arr{\cat{B}} $. Now, $ G(f\circ g) = Gf \circ Gg $ and then $ F(G(f\circ g))  = F(Gf\circ Gg) = FGf\circ FGg$, hence $ F\circ G $ is also a functor. Now, take any arrow $ f\in \arr{\cat{B}} $. We have $ Gf \in \arr{\cat{C}} $ and then $ FGf \in \arr{\cat{D}} $. Therefore, $ F\circ G (f) \in \arr{\cat{D}} $ or in other words, $ F\circ G : \cat{B} \to \cat{C} $, hence $ F\circ G \in \arr{\cat{Cat}} $. We also trivially have the identity functor $ F:\cat{A} \to \cat{A} $ in $ \arr{\cat{Cat}} $. Associativity of Functors also follows from the definition of their composition. Finally, any identity functor $ \Id{\cat{C}} $ and any functor $ F : \cat{C} \to \cat{D}$ in $ \arr{\cat{Cat}} $ are such that $ F\circ \Id{\cat{C}} = F$ as, for any $ f\in \arr{\cat{C}} $, we have $ F\circ \Id{\cat{C}} (f) = F(\Id{\cat{C}}(f)) = F(f) $.
+	Consider the category of categories $ \cat{Cat} $ with functors as arrows between them. Take any $ F \in \arr{\cat{Cat}} $. Clearly, $ F $ has a source category $ \cat{C} $ and target category $ \cat{D} $. Take any $ \cat{C},\cat{D} \in \obj{\cat{Cat}}$ and consider $ F $ to be a functor between them in $ \arr{\cat{Cat}} $. Now take another functor $ G : \cat{B}\to \cat{C} $. We need to show that $ F \circ G $ is also an arrow of $ \cat{Cat} $. For this, we first need to prove that $ F\circ G $ is actually a functor. This is easy to see as mapping arrows to arrows and preservation of identity is simple, however, for preserving composition, consider composable $ f,g\in \arr{\cat{B}} $, therefore, $ f\circ g \in \arr{\cat{B}} $. Now, $ G(f\circ g) = Gf \circ Gg $ and then $ F(G(f\circ g))  = F(Gf\circ Gg) = FGf\circ FGg$, hence $ F\circ G $ is also a functor. Now, take any arrow $ f\in \arr{\cat{B}} $. We have $ Gf \in \arr{\cat{C}} $ and then $ FGf \in \arr{\cat{D}} $. Therefore, $ F\circ G (f) \in \arr{\cat{D}} $ or in other words, $ F\circ G : \cat{B} \to \cat{C} $, hence $ F\circ G \in \arr{\cat{Cat}} $. We also trivially have the identity functor $ F:\cat{A} \to \cat{A} $ in $ \arr{\cat{Cat}} $. Associativity of Functors also follows from the definition of their composition. Finally, any identity functor $ \Id{\cat{C}} $ and any functor $ F : \cat{C} \to \cat{D}$ in $ \arr{\cat{Cat}} $ are such that $ F\circ \Id{\cat{C}} = F$ 
+	s, for any $ f\in \arr{\cat{C}} $, we have $ F\circ \Id{\cat{C(f)}} = F(\Id{\cat{C}}(f)) = F(f) $.
 \end{proof}
 \subsection{Determinant Map is a Natural Transformation.}
 \label{PROOF-3} \begin{proof}
@@ -1193,7 +1315,7 @@ such that
 Now, we need to show that 
 \[\lambda : \GL{n} \longrightarrow \Un\]
 which maps a matrix to it's determinant is a natural transformation.\\
-This means that $ \lambda $ is the collection of arrows, one for each ring $ R $ in $ \cat{Ring} $,
+This means that $ \lambda $ is the collection of arrows, one for each ring $ R $ in $ \cat{Ring} $$ R $ in $ \cat{Ring} $,
 \[\lambda R : \GL{n}R = M_n^{R} \longrightarrow \Un R= R^{\times}\]
 maps each matrix in $ M_n^{R} $ to it's determinant in $ R^{\times} $. Now consider any ring homomorphism $ g : R\to S $ in $ \cat{Ring} $. Note that for any matrix $ M\in M_n^{R} $, $ \lambda R(M) = \det(M) \in R^{\times} $ and then $ \Un f(\det(M)) = f(\det(M)) $. Similarly, $ \GL{n}f(M) = f(M) \in M_n^{S} $ element-wise and then $ \lambda S (f(M)) = \det(f(M)) $. But we know that $ f $ is a ring homomorphism, therefore $ f(\det(M)) = \det(f(M)) $. This means that
 \[\begin{tikzcd}
@@ -1331,6 +1453,84 @@ which is what we expect from a contravariant functor. Therefore, the Yoneda Embe
 \end{proof}
 \subsection{Internal Equivalence Relation in $ \cat{Set} $.}
 \label{A-7}
+\emph{In Diary, $ 14^{th} $ April, 2020.}
+\newpage
+\subsection{The Freyd's Adjoint Functor Theorem}
+\label{A-8}
+This is really an interesting proof with a lot of working parts! I proved it by following the exercise titled (GAFT) of the textbook. I am writing here only the intermediary results of the exercise and show only the final conclusion and an interesting intermediary result in detail here.
+\begin{enumerate}
+	\item { Suppose $ U :\cat{D} \longrightarrow \cat{C} $ is a functor. Then,\[U:\cat{D}\longrightarrow\cat{C}\text{ has an Adjoint} \;\bm{\iff}\;\forall\;C\in \obj{\cat{C}} \text{\;,  }(C,U) \text{ has an Initial Object.}\]
+		\begin{proof}
+			\emph{In Diary at $ 25^{th} - 22^{nd}$ February, $ 2020 $.}
+	\end{proof}}
+\item {Suppose $ U :\cat{D} \longrightarrow \cat{C} $ is a functor. Then,
+\[\text{$ \cat{D} $ has all Limits and $ U $ Preserves Limits }\bm{\implies} \text{ $ (C,U) $ has all Limits.}\]
+\begin{proof}
+	\emph{In Diary at $ 21^{st} - 18^{th}$ February, $ 2020 $.}
+\end{proof}
+}
+\item {Suppose $ U : \cat{D} \longrightarrow\cat{C} $ is a functor. Then,
+\[\text{Functor $ U $ satisfies Solution Set Condition }\bm{\iff}\;\forall \;C\in \obj{\cat{C}}\text{ ,  $ (C,U) $ has a Weak Initial Set. }\footnote{A weak initial set is a small set of objects such that for any object of the underlying category, there exists an arrow with that object as the target and some object in the weak initial set as source.}\]
+\begin{proof}
+	\emph{In Diary at $ 17^{th} - 14^{th}$ February, $ 2020 $.}
+\end{proof}}
+\item {Suppose $ \cat{C} $ is a category. Then,
+\[\text{$ \cat{C} $ has all Products and a Weak Initial Set }\bm{\implies} \text{ $ \cat{C} $ has a Weak Initial Object.}\]
+\begin{proof}
+	\emph{Trivial, but still in Diary at $ 13^{th}$ February, $ 2020 $.}
+\end{proof}
+}
+\item {Suppose $ \cat{C} $ is a category. Then,
+\begin{align*}
+	\textbf{1. } & \cat{C}  \text{ has a Weak Initial Object, denoted $ A $.}\\
+	\textbf{2. } & \text{ The Equalizer $ E $ of all endomorphisms of $ A $ exists, denoted $ f : E\to A $.}\\
+	&\\
+	\bm{\implies} & \text{$ E $ is the Initial Object of $ \cat{C} $.}
+\end{align*}
+\begin{proof}
+	This is a slightly non-trivial result, hence I am formally writing it here. \\
+	Take any object $ C\in \obj{\cat{C}} $. Since $ A $ is weakly initial, therefore $ \exists \;g: A\to C $ which may not be unique. Now, since $ f : E\to A $ is an Equalizer of all endomorphisms of $ A $, then, for any $ i_1, i_2 : A\to A $, we must have:
+	\[i_1 \circ f = i_2 \circ f = \Id{A} \circ f = f.\]
+	Now, to prove that arrows from $ E $ to any other object is unique, we take two arrows $ x,y : E\to C $. Let's take Equalizer of the pair $ x,y : E\to C $, and denote it by $ e : F\to E $. We then have the following diagram:
+	\[\begin{tikzcd}
+		F \\
+		E & C \\
+		A & A
+		\arrow["x", shift left=2, from=2-1, to=2-2]
+		\arrow["y"', shift right=2, from=2-1, to=2-2]
+		\arrow["e"', tail, from=1-1, to=2-1]
+		\arrow["f"', tail, from=2-1, to=3-1]
+		\arrow["h", curve={height=-18pt}, from=3-1, to=1-1]
+		\arrow[""{name=0, anchor=center, inner sep=0}, curve={height=12pt}, from=3-1, to=3-2]
+		\arrow[""{name=1, anchor=center, inner sep=0}, curve={height=-12pt}, from=3-1, to=3-2]
+		\arrow[shorten <=3pt, shorten >=3pt, Rightarrow, dotted, no head, from=1, to=0]
+	\end{tikzcd}\]
+where $ e $ and $ f $ are monomorphisms because they are equalizers (Proposition \ref{P-8}) and $ h $ is a non-unique arrow due to weak intiality of $ A $. 
+Now we see that $ e\circ h\circ f : E\to E $ and $ f\circ e\circ h : A\to A $ are two arrows. Now, we should have:
+\begin{align*}
+	(f\circ e\circ h) \circ f &= f\\
+	f\circ (e\circ h\circ f)&=f\circ \Id{E}\\
+	\implies\;\;\;\;\;e\circ h \circ f &= \Id{E}&&\text{$ \because f $ is a mono} 
+\end{align*}
+Hence,
+\begin{align*}
+	x&=x\circ(e\circ h\circ f)\\ &= (x\circ e)\circ h\circ f\\
+	&= (y\circ e)\circ h\circ f&&\text{$ \because e$ is the Equalizer.}\\
+	&= y\circ (e\circ h\circ f)\\
+	&= y\circ \Id{E} = y 
+\end{align*}
+That is, $ x = y $. Now since $ C\in \obj{\cat{C}} $ was arbitrary, therefore $ E $ is initial.
+\end{proof}
+
+}
+\item {\textbf{General Adjoint Functor Theorem - Conclusion}.\begin{proof}
+		 (L $ \implies $ R) Suppose $ R: \cat{D} \longrightarrow\cat{C} $ has a Left Adjoint and $ \cat{D} $ has all Limits. By \textbf{Part (1)}, $ \forall C\in \obj{\cat{C}} $, the comma category $ (C,R) $ has an Initial Object. By \textbf{Part (3)}, since we have that $ (C,R) $ has a weak initial set as singleton of it's initial object, then $ R:\cat{D}\longrightarrow\cat{C} $ satisfies solution set condition. The fact that $ R : \cat{D}\longrightarrow\cat{C} $ preserves limit is obvious from the fact $ R $ has an Adjoint (Theorem \ref{T-5}).\\\\
+		(R$ \implies $ L) Suppose $ R:\cat{D} \longrightarrow\cat{C}$ preserves all Limits and $ R $ satisfies solution set condition. Now since $ R $ satisfies solution set condition, therefore by \textbf{Part (3)}, $ \forall C\in \obj{\cat{C}} $, the comma category $ (C,R) $ has a weak initial set. Now because $ R $ preserves limits and $ \cat{D} $ has all Limits, by \textbf{Part (2)}, $ \forall C\in \obj{\cat{C}} $, $ (C,R) $ is complete and hence has all products. Now because $ (C,R) $ has all products and $ (C,R) $ has a weak initial set, hence by \textbf{Part (4)}, $ (C,R) $ has a weak initial object.\\
+		Finally, by \textbf{Part (1)}, since $ (C,R) $ has an initial object $ \forall C\in \obj{\cat{C}} $, we conclude that $ R : \cat{D} \longrightarrow\cat{C}$ has a Left Adjoint.
+	\end{proof}
+}
+\end{enumerate}
+\[\]
 %\subsection{An Interesting Functor (Sheaves!).}
 %\label{A-6}
 %
